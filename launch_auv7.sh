@@ -1,0 +1,1 @@
+docker-compose -f docker-compose.auv7.yml up
