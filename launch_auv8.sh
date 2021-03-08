@@ -1,2 +1,5 @@
-export XAVIER_IP=192.168.2.229
+XAVIER=$(hostname -I | awk '{print $1}')
+echo $XAVIER
+
+export XAVIER_IP=$XAVIER
 docker-compose -f docker-compose.auv8.yml up
