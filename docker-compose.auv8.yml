@@ -4,6 +4,8 @@ services:
     network_mode: host
     image: ros:melodic-ros-core
     command: stdbuf -o L roscore
+    ports:
+      - 11311:11311
 
   provider_kill_mission:
     image: docker.pkg.github.com/sonia-auv/provider_kill_mission/provider_kill_mission:arm64-perception-latest
@@ -54,14 +56,17 @@ services:
       - ros-master
 
   provider_thruster:
-    image: docker.pkg.github.com/sonia-auv/provider_thruster/provider_thruster:arm64-perception-latest
+    image: docker.pkg.github.com/sonia-auv/provider_thruster/provider_thruster:arm64-perception-feature-matlab-proc-control
     network_mode: host
     depends_on:
       - ros-master
 
   provider_imu:
-    image: docker.pkg.github.com/sonia-auv/provider_imu/provider_imu:arm64-perception-latest
+    image: docker.pkg.github.com/sonia-auv/provider_imu/provider_imu:arm64-perception-feature-vn-100
     network_mode: host
+    privileged: true
+    volumes:
+      - /dev/IMU:/dev/IMU
     depends_on:
       - ros-master
 
@@ -84,13 +89,25 @@ services:
       - ros-master
 
   interface_rs485:
-    image: docker.pkg.github.com/sonia-auv/interface_rs485/interface_rs485:arm64-perception-latest
+    image: docker.pkg.github.com/sonia-auv/interface_rs485/interface_rs485:arm64-perception-feature-interface-docker
     network_mode: host
+    privileged: true
+    volumes:
+      - /dev/RS485:/dev/RS485
     depends_on:
       - ros-master
 
-  proc_image_processing:
-    image: docker.pkg.github.com/sonia-auv/proc_image_processing/proc_image_processing:arm64-perception-latest
+  #proc_image_processing:
+   # image: docker.pkg.github.com/sonia-auv/proc_image_processing/proc_image_processing:arm64-perception-latest
+   # network_mode: host
+   # depends_on:
+   #   - ros-master
+
+  provider_vision:
+    image: docker.pkg.github.com/sonia-auv/provider_vision/provider_vision:arm64-perception-feature-testing-modif
     network_mode: host
+    privileged: true
+    devices:
+      - /dev/CAM0:/dev/CAM0
     depends_on:
       - ros-master
