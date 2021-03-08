@@ -131,6 +131,7 @@ services:
 
   proc_control:
       image: docker.pkg.github.com/sonia-auv/proc_control/proc_control:arm64-perception-feature-ssh
+      container_name: proc_control
       ports: 
         - 2222:22
       depends_on:
