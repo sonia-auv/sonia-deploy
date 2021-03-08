@@ -1,24 +1,25 @@
-version: "3"
+version: "3.4"
 
-networks:
-  ros:
-    driver: bridge
+#networks:
+#  ros:
+#    driver: bridge
 
 services:
   ros-master:
 #    network_mode: host
     image: ros:melodic-ros-core
     container_name: ros-master
-    environment:
-      - "ROS_HOSTNAME=192.168.2.229"
-#    build:
-#      context: .
-#      network: host
-    networks:
-      - ros
-    command: stdbuf -o L roscore
+    build:
+       context: .
+       network: host
+#    environment:
+#      - "ROS_MASTER_URI=http://localhost:11311"
+#      - ROS_HOSTNAME=172.17.
+#    networks:
+#      - ros
     ports:
       - 11311:11311
+    command: stdbuf -o L roscore
 
 #  provider_kill_mission:
 #    image: docker.pkg.github.com/sonia-auv/provider_kill_mission/provider_kill_mission:arm64-perception-latest
@@ -119,22 +120,18 @@ services:
   provider_vision:
     image: docker.pkg.github.com/sonia-auv/provider_vision/provider_vision:arm64-perception-feature-testing-modif
     container_name: provider_vision
-#    build:
-#      context: .
-#      network: host
+    build:
+      context: .
+      network: host
     environment:
       - "ROS_HOSTNAME=provider_vision"
-      - "ROS_MASTER_URI=http://ros-master:11311"
+      - "ROS_MASTER_URI=http://localhost:11311"
 #    network_mode: host
-    networks:
-      - ros
+#    networks:
+#      - ros
     privileged: true
     devices:
       - /dev/CAM0:/dev/CAM0
     depends_on:
       - ros-master
     command: stdbuf -o L roslaunch --wait provider_vision provider_vision.launch
-#      - roslaunch
-#      - --wait
-#      - provider_vision
-#      - provider_vision.launch
