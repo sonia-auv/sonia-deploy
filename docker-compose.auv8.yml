@@ -111,3 +111,10 @@ services:
       - /dev/CAM0:/dev/CAM0
     depends_on:
       - ros-master
+
+  proc_control:
+    image: docker.pkg.github.com/sonia-auv/proc_control/proc_control:arm64-perception-feature-ssh
+    ports: 
+      - 2222:22
+    depends_on:
+      - ros-master
