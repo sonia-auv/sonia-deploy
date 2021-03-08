@@ -1,13 +1,21 @@
-version: "3.4"
+version: "3"
+
+networks:
+  ros:
+    driver: bridge
 
 services:
   ros-master:
-    network_mode: host
+#    network_mode: host
     image: ros:melodic-ros-core
-    container_name : ros-master
+    container_name: ros-master
+    environment:
+      - "ROS_HOSTNAME=192.168.2.229"
 #    build:
 #      context: .
 #      network: host
+    networks:
+      - ros
     command: stdbuf -o L roscore
     ports:
       - 11311:11311
@@ -114,10 +122,12 @@ services:
 #    build:
 #      context: .
 #      network: host
-#    environment:
-#      - ROS_HOSTNAME=provider_vision
-#      - ROS_MATER_URI=http://ros-master:11311
-    network_mode: host
+    environment:
+      - "ROS_HOSTNAME=provider_vision"
+      - "ROS_MASTER_URI=http://ros-master:11311"
+#    network_mode: host
+    networks:
+      - ros
     privileged: true
     devices:
       - /dev/CAM0:/dev/CAM0
