@@ -1,96 +1,119 @@
-version: "3"
+version: "3.4"
+
 services:
   ros-master:
     network_mode: host
     image: ros:melodic-ros-core
+    container_name : ros-master
+    environment: 
+      - ROS_HOSTNAME=localhost
     command: stdbuf -o L roscore
+    ports:
+      - 11311:11311
 
-  provider_kill_mission:
-    image: docker.pkg.github.com/sonia-auv/provider_kill_mission/provider_kill_mission:x86-perception-latest
+  sonia-ros-bridge:
+    image: docker.pkg.github.com/sonia-auv/sonia-ros-bridge/sonia-ros-bridge:x86-perception-latest
     network_mode: host
+    container_name: sonia-ros-bridge
+    environment:
+      - "ROS_HOSTNAME=localhost"
+      - "ROS_MASTER_URI=http://localhost:11311"
+    ports:
+      - "9090:9090"
     depends_on:
       - ros-master
+    command:
+      - roslaunch
+      - --wait
+      - rosbridge_server
+      - rosbridge_websocket.launch
 
-  proc_mapping:
-    image: docker.pkg.github.com/sonia-auv/proc_mapping/proc_mapping:x86-perception-latest
-    network_mode: host
-    depends_on:
-      - ros-master
+  # provider_kill_mission:
+  #   image: docker.pkg.github.com/sonia-auv/provider_kill_mission/provider_kill_mission:x86-perception-latest
+  #   network_mode: host
+  #   depends_on:
+  #     - ros-master
 
-  proc_navigation:
-    image: docker.pkg.github.com/sonia-auv/proc_navigation/proc_navigation:x86-perception-latest
-    network_mode: host
-    depends_on:
-      - ros-master
+  # proc_mapping:
+  #   image: docker.pkg.github.com/sonia-auv/proc_mapping/proc_mapping:x86-perception-latest
+  #   network_mode: host
+  #   depends_on:
+  #     - ros-master
 
-  proc_actuators:
-    image: docker.pkg.github.com/sonia-auv/proc_actuators/proc_actuators:x86-perception-latest
-    network_mode: host
-    depends_on:
-      - ros-master
+  # proc_navigation:
+  #   image: docker.pkg.github.com/sonia-auv/proc_navigation/proc_navigation:x86-perception-latest
+  #   network_mode: host
+  #   depends_on:
+  #     - ros-master
 
-  proc_hydrophone:
-    image: docker.pkg.github.com/sonia-auv/proc_hydrophone/proc_hydrophone:x86-perception-latest
-    network_mode: host
-    depends_on:
-      - ros-master
+  # proc_actuators:
+  #   image: docker.pkg.github.com/sonia-auv/proc_actuators/proc_actuators:x86-perception-latest
+  #   network_mode: host
+  #   depends_on:
+  #     - ros-master
 
-  proc_sonar:
-    image: docker.pkg.github.com/sonia-auv/proc_sonar/proc_sonar:x86-perception-latest
-    network_mode: host
-    depends_on:
-      - ros-master
+  # proc_hydrophone:
+  #   image: docker.pkg.github.com/sonia-auv/proc_hydrophone/proc_hydrophone:x86-perception-latest
+  #   network_mode: host
+  #   depends_on:
+  #     - ros-master
 
-  provider_dvl:
-    image: docker.pkg.github.com/sonia-auv/provider_dvl/provider_dvl:x86-perception-latest
-    network_mode: host
-    depends_on:
-      - ros-master
+  # proc_sonar:
+  #   image: docker.pkg.github.com/sonia-auv/proc_sonar/proc_sonar:x86-perception-latest
+  #   network_mode: host
+  #   depends_on:
+  #     - ros-master
 
-  provider_hydrophone:
-    image: docker.pkg.github.com/sonia-auv/provider_hydrophone/provider_hydrophone:x86-perception-latest
-    network_mode: host
-    depends_on:
-      - ros-master
+  # provider_dvl:
+  #   image: docker.pkg.github.com/sonia-auv/provider_dvl/provider_dvl:x86-perception-latest
+  #   network_mode: host
+  #   depends_on:
+  #     - ros-master
 
-  provider_thruster:
-    image: docker.pkg.github.com/sonia-auv/provider_thruster/provider_thruster:x86-perception-latest
-    network_mode: host
-    depends_on:
-      - ros-master
+  # provider_hydrophone:
+  #   image: docker.pkg.github.com/sonia-auv/provider_hydrophone/provider_hydrophone:x86-perception-latest
+  #   network_mode: host
+  #   depends_on:
+  #     - ros-master
 
-  provider_imu:
-    image: docker.pkg.github.com/sonia-auv/provider_imu/provider_imu:x86-perception-latest
-    network_mode: host
-    depends_on:
-      - ros-master
+  # provider_thruster:
+  #   image: docker.pkg.github.com/sonia-auv/provider_thruster/provider_thruster:x86-perception-latest
+  #   network_mode: host
+  #   depends_on:
+  #     - ros-master
 
-  provider_power:
-    image: docker.pkg.github.com/sonia-auv/provider_power/provider_power:x86-perception-latest
-    network_mode: host
-    depends_on:
-      - ros-master
+  # provider_imu:
+  #   image: docker.pkg.github.com/sonia-auv/provider_imu/provider_imu:x86-perception-latest
+  #   network_mode: host
+  #   depends_on:
+  #     - ros-master
 
-  provider_actuators:
-    image: docker.pkg.github.com/sonia-auv/provider_actuators/provider_actuators:x86-perception-latest
-    network_mode: host
-    depends_on:
-      - ros-master
+  # provider_power:
+  #   image: docker.pkg.github.com/sonia-auv/provider_power/provider_power:x86-perception-latest
+  #   network_mode: host
+  #   depends_on:
+  #     - ros-master
 
-  provider_sonar:
-    image: docker.pkg.github.com/sonia-auv/provider_sonar/provider_sonar:x86-perception-latest
-    network_mode: host
-    depends_on:
-      - ros-master
+  # provider_actuators:
+  #   image: docker.pkg.github.com/sonia-auv/provider_actuators/provider_actuators:x86-perception-latest
+  #   network_mode: host
+  #   depends_on:
+  #     - ros-master
 
-  interface_rs485:
-    image: docker.pkg.github.com/sonia-auv/interface_rs485/interface_rs485:x86-perception-latest
-    network_mode: host
-    depends_on:
-      - ros-master
+  # provider_sonar:
+  #   image: docker.pkg.github.com/sonia-auv/provider_sonar/provider_sonar:x86-perception-latest
+  #   network_mode: host
+  #   depends_on:
+  #     - ros-master
 
-  proc_image_processing:
-    image: docker.pkg.github.com/sonia-auv/proc_image_processing/proc_image_processing:x86-perception-latest
-    network_mode: host
-    depends_on:
-      - ros-master
+  # interface_rs485:
+  #   image: docker.pkg.github.com/sonia-auv/interface_rs485/interface_rs485:x86-perception-latest
+  #   network_mode: host
+  #   depends_on:
+  #     - ros-master
+
+  # proc_image_processing:
+  #   image: docker.pkg.github.com/sonia-auv/proc_image_processing/proc_image_processing:x86-perception-latest
+  #   network_mode: host
+  #   depends_on:
+  #     - ros-master
