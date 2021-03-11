@@ -121,3 +121,15 @@ services:
     depends_on:
       - ros-master
     command: stdbuf -o L roslaunch --wait provider_vision provider_vision.launch
+
+  proc_control:
+      image: docker.pkg.github.com/sonia-auv/proc_control/proc_control:arm64-perception-feature-ssh
+      container_name: proc_control
+      environment:
+        - ROS_IP=${XAVIER_IP}
+        - ROS_MASTER_URI=http://${XAVIER_IP}:11311
+      network_mode: host
+      ports: 
+        - 2222:22
+      depends_on:
+        - ros-master
