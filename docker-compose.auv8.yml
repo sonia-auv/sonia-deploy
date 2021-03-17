@@ -145,6 +145,6 @@ services:
         - ROS_MASTER_URI=http://${ADRESS_IP}:11311
       privileged: true
       ports: 
-        - 2222:22
+        - "2222:22"
       depends_on:
         - ros-master
