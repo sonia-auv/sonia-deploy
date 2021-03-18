@@ -11,6 +11,23 @@ services:
     ports:
       - ${ADRESS_IP}:11311:11311
     command: stdbuf -o L roscore
+  
+  sonia-ros-bridge:
+      image: docker.pkg.github.com/sonia-auv/sonia-ros-bridge/sonia-ros-bridge:x86-perception-latest
+      container_name: sonia-ros-bridge
+      network_mode: host
+      environment:
+        - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+        - ROS_IP=${ADRESS_IP}
+      ports:
+        - "9090:9090"
+      depends_on:
+        - ros-master
+      command:
+        - roslaunch
+        - --wait
+        - rosbridge_server
+        - rosbridge_websocket.launch
 
 #  provider_kill_mission:
 #    image: docker.pkg.github.com/sonia-auv/provider_kill_mission/provider_kill_mission:arm64-perception-latest
