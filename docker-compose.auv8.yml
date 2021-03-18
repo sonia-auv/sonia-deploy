@@ -13,7 +13,7 @@ services:
     command: stdbuf -o L roscore
   
   sonia-ros-bridge:
-      image: docker.pkg.github.com/sonia-auv/sonia-ros-bridge/sonia-ros-bridge:x86-perception-latest
+      image: docker.pkg.github.com/sonia-auv/sonia-ros-bridge/sonia-ros-bridge:arm64-perception-latest
       container_name: sonia-ros-bridge
       network_mode: host
       environment:
