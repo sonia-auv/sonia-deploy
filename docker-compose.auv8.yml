@@ -147,7 +147,7 @@ services:
    #   - ros-master
 
   provider_vision:
-    image: docker.pkg.github.com/sonia-auv/provider_vision/provider_vision:arm64-perception-feature-testing-modif
+    image: docker.pkg.github.com/sonia-auv/provider_vision/provider_vision:arm64-perception-develop
     container_name: provider_vision
     environment:
       - ROS_IP=${ADRESS_IP}
@@ -173,6 +173,10 @@ services:
         - "17725:17725"
       depends_on:
         - ros-master
+
+  octopus_telemetry:
+      image: octopus-ui:latest
+      container_name: octopus_telemetry
 
   # proc_control:
   #     image: docker.pkg.github.com/sonia-auv/proc_control/proc_control:arm64-perception-feature-auv8-dockerrise-proc
