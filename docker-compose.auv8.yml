@@ -82,7 +82,7 @@ services:
 #      - ros-master
 
   provider_thruster:
-    image: docker.pkg.github.com/sonia-auv/provider_thruster/provider_thruster:arm64-perception-feature-matlab-proc-control
+    image: docker.pkg.github.com/sonia-auv/provider_thruster/provider_thruster:arm64-perception-feature-swap-rs485-definition
     container_name: provider_thruster
     environment:
       - ROS_IP=${ADRESS_IP}
@@ -106,7 +106,7 @@ services:
       - ros-master
 
   provider_power:
-    image: docker.pkg.github.com/sonia-auv/provider_power/provider_power:arm64-perception-feature-log-auv8
+    image: docker.pkg.github.com/sonia-auv/provider_power/provider_power:arm64-perception-feature-backplane-rev2
     container_name: provider_power
     environment:
       - ROS_IP=${ADRESS_IP}
@@ -147,7 +147,7 @@ services:
    #   - ros-master
 
   provider_vision:
-    image: docker.pkg.github.com/sonia-auv/provider_vision/provider_vision:arm64-perception-develop
+    image: docker.pkg.github.com/sonia-auv/provider_vision/provider_vision:arm64-perception-latest
     container_name: provider_vision
     environment:
       - ROS_IP=${ADRESS_IP}
