@@ -13,7 +13,7 @@ services:
     command: stdbuf -o L roscore
 
   sonia-ros-bridge:
-      image: docker.pkg.github.com/sonia-auv/sonia-ros-bridge/sonia-ros-bridge:x86-perception-latest
+      image: ghcr.io/sonia-auv/sonia-ros-bridge/sonia-ros-bridge:x86-perception-latest
       container_name: sonia-ros-bridge
       network_mode: host
       environment:
@@ -30,59 +30,59 @@ services:
         - rosbridge_websocket.launch
 
 #  provider_kill_mission:
-#    image: docker.pkg.github.com/sonia-auv/provider_kill_mission/provider_kill_mission:x86-perception-latest
+#    image: ghcr.io/sonia-auv/provider_kill_mission/provider_kill_mission:x86-perception-latest
 #    network_mode: host
 #    depends_on:
 #      - ros-master
 
 #  proc_mapping:
-#    image: docker.pkg.github.com/sonia-auv/proc_mapping/proc_mapping:x86-perception-latest
+#    image: ghcr.io/sonia-auv/proc_mapping/proc_mapping:x86-perception-latest
 #    network_mode: host
 #    depends_on:
 #      - ros-master
 
 #  proc_navigation:
-#    image: docker.pkg.github.com/sonia-auv/proc_navigation/proc_navigation:x86-perception-latest
+#    image: ghcr.io/sonia-auv/proc_navigation/proc_navigation:x86-perception-latest
 #    network_mode: host
 #    depends_on:
 #      - ros-master
 
 #  proc_actuators:
-#    image: docker.pkg.github.com/sonia-auv/proc_actuators/proc_actuators:x86-perception-latest
+#    image: ghcr.io/sonia-auv/proc_actuators/proc_actuators:x86-perception-latest
 #    network_mode: host
 #    depends_on:
 #      - ros-master
 
 #  proc_hydrophone:
-#    image: docker.pkg.github.com/sonia-auv/proc_hydrophone/proc_hydrophone:x86-perception-latest
+#    image: ghcr.io/sonia-auv/proc_hydrophone/proc_hydrophone:x86-perception-latest
 #    network_mode: host
 #    depends_on:
 #      - ros-master
 
 #  proc_sonar:
-#    image: docker.pkg.github.com/sonia-auv/proc_sonar/proc_sonar:x86-perception-latest
+#    image: ghcr.io/sonia-auv/proc_sonar/proc_sonar:x86-perception-latest
 #    network_mode: host
 #    depends_on:
 #      - ros-master
 
-  provider_dvl:
-    image: docker.pkg.github.com/sonia-auv/provider_dvl/provider_dvl:x86-perception-feature-pathfinder-dvl
-    container_name: provider_dvl
-    environment:
-      - ROS_IP=${ADRESS_IP}
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-    network_mode: host
-    depends_on:
-      - ros-master
+#  provider_dvl:
+#    image: ghcr.io/sonia-auv/provider_dvl/provider_dvl:x86-perception-feature-pathfinder-dvl
+#    container_name: provider_dvl
+#    environment:
+#      - ROS_IP=${ADRESS_IP}
+#      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+#    network_mode: host
+#    depends_on:
+#      - ros-master
 
 #  provider_hydrophone:
-#    image: docker.pkg.github.com/sonia-auv/provider_hydrophone/provider_hydrophone:x86-perception-latest
+#    image: ghcr.io/sonia-auv/provider_hydrophone/provider_hydrophone:x86-perception-latest
 #    network_mode: host
 #    depends_on:
 #      - ros-master
 
   provider_thruster:
-    image: docker.pkg.github.com/sonia-auv/provider_thruster/provider_thruster:x86-perception-feature-matlab-proc-control
+    image: ghcr.io/sonia-auv/provider_thruster/provider_thruster:x86-perception-feature-matlab-proc-control
     container_name: provider_thruster
     environment:
       - ROS_IP=${ADRESS_IP}
@@ -92,76 +92,76 @@ services:
     depends_on:
       - ros-master
 
-  provider_imu:
-    image: docker.pkg.github.com/sonia-auv/provider_imu/provider_imu:x86-perception-feature-vn-100
-    container_name: provider_imu
-    environment:
-    - ROS_IP=${ADRESS_IP}
-    - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-    network_mode: host
-    privileged: true
-    volumes:
-      - /dev/IMU:/dev/IMU
-    depends_on:
-      - ros-master
+#  provider_imu:
+#    image: ghcr.io/sonia-auv/provider_imu/provider_imu:x86-perception-feature-vn-100
+#    container_name: provider_imu
+#    environment:
+#    - ROS_IP=${ADRESS_IP}
+#    - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+#    network_mode: host
+#    privileged: true
+#    volumes:
+#      - /dev/IMU:/dev/IMU
+#    depends_on:
+#      - ros-master
 
-  provider_power:
-    image: docker.pkg.github.com/sonia-auv/provider_power/provider_power:x86-perception-feature-log-auv8
-    container_name: provider_power
-    environment:
-      - ROS_IP=${ADRESS_IP}
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311    
-    network_mode: host
-    depends_on:
-      - ros-master
+#  provider_power:
+#    image: ghcr.io/sonia-auv/provider_power/provider_power:x86-perception-feature-log-auv8
+#    container_name: provider_power
+#    environment:
+#      - ROS_IP=${ADRESS_IP}
+#      - ROS_MASTER_URI=http://${ADRESS_IP}:11311    
+#    network_mode: host
+#    depends_on:
+#      - ros-master
 
 #  provider_actuators:
-#    image: docker.pkg.github.com/sonia-auv/provider_actuators/provider_actuators:x86-perception-latest
+#    image: ghcr.io/sonia-auv/provider_actuators/provider_actuators:x86-perception-latest
 #    network_mode: host
 #    depends_on:
 #      - ros-master
 
 #  provider_sonar:
-#   image: docker.pkg.github.com/sonia-auv/provider_sonar/provider_sonar:x86-perception-latest
+#   image: ghcr.io/sonia-auv/provider_sonar/provider_sonar:x86-perception-latest
 #    network_mode: host
 #    depends_on:
 #      - ros-master
 
-  interface_rs485:
-    image: docker.pkg.github.com/sonia-auv/interface_rs485/interface_rs485:x86-perception-feature-interface-docker
-    container_name: interface_rs485
-    environment:
-      - ROS_IP=${ADRESS_IP}
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-    network_mode: host
-    privileged: true
-    volumes:
-      - /dev/RS485:/dev/RS485
-    depends_on:
-      - ros-master
+#  interface_rs485:
+#    image: ghcr.io/sonia-auv/interface_rs485/interface_rs485:x86-perception-feature-interface-docker
+#    container_name: interface_rs485
+#    environment:
+#      - ROS_IP=${ADRESS_IP}
+#      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+#    network_mode: host
+#    privileged: true
+#    volumes:
+#      - /dev/RS485:/dev/RS485
+#    depends_on:
+#      - ros-master
 
   #proc_image_processing:
-   # image: docker.pkg.github.com/sonia-auv/proc_image_processing/proc_image_processing:x86-perception-latest
+   # image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:x86-perception-latest
    # network_mode: host
    # depends_on:
    #   - ros-master
 
-  provider_vision:
-    image: docker.pkg.github.com/sonia-auv/provider_vision/provider_vision:x86-perception-feature-testing-modif
-    container_name: provider_vision
-    environment:
-      - ROS_IP=${ADRESS_IP}
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-    network_mode: host
-    privileged: true
-    devices:
-      - /dev/CAM0:/dev/CAM0
-    depends_on:
-      - ros-master
-    command: stdbuf -o L roslaunch --wait provider_vision provider_vision.launch
+#  provider_vision:
+#    image: ghcr.io/sonia-auv/provider_vision/provider_vision:x86-perception-feature-testing-modif
+#    container_name: provider_vision
+#    environment:
+#      - ROS_IP=${ADRESS_IP}
+#      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+#    network_mode: host
+#    privileged: true
+#    devices:
+#      - /dev/CAM0:/dev/CAM0
+#    depends_on:
+#      - ros-master
+#    command: stdbuf -o L roslaunch --wait provider_vision provider_vision.launch
 
   simulink_monitor:
-      image: docker.pkg.github.com/sonia-auv/simulink-monitor/simulink-monitor:x86-perception-latest
+      image: ghcr.io/sonia-auv/simulink-monitor/simulink-monitor:x86-perception-latest
       container_name: simulink_monitor
       environment:
         - ROS_IP=${ADRESS_IP}
@@ -175,7 +175,7 @@ services:
         - ros-master
 
   # proc_control:
-  #     image: docker.pkg.github.com/sonia-auv/proc_control/proc_control:x86-perception-feature-auv8-dockerrise-proc
+  #     image: ghcr.io/sonia-auv/proc_control/proc_control:x86-perception-feature-auv8-dockerrise-proc
   #     container_name: proc_control
   #     environment:
   #       - ROS_IP=${ADRESS_IP}
