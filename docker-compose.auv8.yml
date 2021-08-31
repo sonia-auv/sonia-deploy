@@ -159,7 +159,7 @@ services:
       - /dev/CAM1:/dev/CAM1
     depends_on:
       - ros-master
-#    command: stdbuf -o L roslaunch --wait provider_vision provider_vision.launch
+    command: stdbuf -o L roslaunch --wait provider_vision provider_vision.launch
 
   simulink_monitor:
       image: docker.pkg.github.com/sonia-auv/simulink-monitor/simulink-monitor:arm64-perception-latest
