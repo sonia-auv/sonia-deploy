@@ -82,7 +82,7 @@ services:
 #      - ros-master
 
   provider_thruster:
-    image: docker.pkg.github.com/sonia-auv/provider_thruster/provider_thruster:arm64-perception-feature-swap_rs485_definition
+    image: docker.pkg.github.com/sonia-auv/provider_thruster/provider_thruster:arm64-perception-develop
     container_name: provider_thruster
     environment:
       - ROS_IP=${ADRESS_IP}
