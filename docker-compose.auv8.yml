@@ -106,7 +106,7 @@ services:
       - ros-master
 
   provider_power:
-    image: docker.pkg.github.com/sonia-auv/provider_power/provider_power:arm64-perception-feature-backplane_rev_2_menage
+    image: docker.pkg.github.com/sonia-auv/provider_power/provider_power:arm64-perception-develop
     container_name: provider_power
     environment:
       - ROS_IP=${ADRESS_IP}
