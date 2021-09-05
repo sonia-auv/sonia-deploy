@@ -176,7 +176,7 @@ services:
       - ros-master
 
   octopus_telemetry:
-    image: ghcr.io/sonia-auv/octopus-telemetry:fix
+    image: ghcr.io/sonia-auv/octopus-telemetry/octopus-telemetry:fix
     container_name: octopus_telemetry
     network_mode: host
     depends_on: 
