@@ -175,12 +175,12 @@ services:
     depends_on:
       - ros-master
 
-  #octopus_telemetry:
-  #  image: octopus-ui:latest
-  #  container_name: octopus_telemetry
-  #  network_mode: host
-  #  depends_on: 
-  #    - sonia-ros-bridge
+  octopus_telemetry:
+    image: octopus-ui:fix
+    container_name: octopus_telemetry
+    network_mode: host
+    depends_on: 
+      - sonia-ros-bridge
 
   # proc_control:
   #     image: docker.pkg.github.com/sonia-auv/proc_control/proc_control:arm64-perception-feature-auv8-dockerrise-proc
