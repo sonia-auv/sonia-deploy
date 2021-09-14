@@ -1,26 +1,16 @@
-version: "3.4"
+version: "3.9"
 
 services:
   ros-master:
     network_mode: host
     image: ros:melodic-ros-core
     container_name: ros-master
-    environment:
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-      - ROS_IP=${ADRESS_IP}
-    ports:
-      - ${ADRESS_IP}:11311:11311
     command: stdbuf -o L roscore
 
   sonia-ros-bridge:
       image: ghcr.io/sonia-auv/sonia-ros-bridge/sonia-ros-bridge:x86-perception-latest
       container_name: sonia-ros-bridge
       network_mode: host
-      environment:
-        - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-        - ROS_IP=${ADRESS_IP}
-      ports:
-        - "9090:9090"
       depends_on:
         - ros-master
       command:
@@ -81,16 +71,16 @@ services:
 #    depends_on:
 #      - ros-master
 
-  provider_thruster:
-    image: ghcr.io/sonia-auv/provider_thruster/provider_thruster:x86-perception-feature-matlab-proc-control
-    container_name: provider_thruster
-    environment:
-      - ROS_IP=${ADRESS_IP}
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-    network_mode: host
-    privileged: true
-    depends_on:
-      - ros-master
+#  provider_thruster:
+#    image: ghcr.io/sonia-auv/provider_thruster/provider_thruster:x86-perception-feature-matlab-proc-control
+#    container_name: provider_thruster
+#    environment:
+#      - ROS_IP=${ADRESS_IP}
+#      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+#    network_mode: host
+#    privileged: true
+#    depends_on:
+#      - ros-master
 
 #  provider_imu:
 #    image: ghcr.io/sonia-auv/provider_imu/provider_imu:x86-perception-feature-vn-100
@@ -140,11 +130,12 @@ services:
 #    depends_on:
 #      - ros-master
 
-  #proc_image_processing:
-   # image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:x86-perception-latest
-   # network_mode: host
-   # depends_on:
-   #   - ros-master
+  proc_image_processing:
+    image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:x86-perception-latest
+    container_name: proc_image_processing
+    network_mode: host
+    depends_on:
+      - ros-master
 
 #  provider_vision:
 #    image: ghcr.io/sonia-auv/provider_vision/provider_vision:x86-perception-feature-testing-modif
@@ -160,19 +151,19 @@ services:
 #      - ros-master
 #    command: stdbuf -o L roslaunch --wait provider_vision provider_vision.launch
 
-  simulink_monitor:
-      image: ghcr.io/sonia-auv/simulink-monitor/simulink-monitor:x86-perception-latest
-      container_name: simulink_monitor
-      environment:
-        - ROS_IP=${ADRESS_IP}
-        - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-      network_mode: host
-      privileged: true
-      ports: 
-        - "22:22"
-        - "17725:17725"
-      depends_on:
-        - ros-master
+#  simulink_monitor:
+#      image: ghcr.io/sonia-auv/simulink-monitor/simulink-monitor:x86-perception-latest
+#      container_name: simulink_monitor
+#      environment:
+#        - ROS_IP=${ADRESS_IP}
+#        - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+#      network_mode: host
+#      privileged: true
+#      ports: 
+#        - "22:22"
+#        - "17725:17725"
+#      depends_on:
+#        - ros-master
 
   # proc_control:
   #     image: ghcr.io/sonia-auv/proc_control/proc_control:x86-perception-feature-auv8-dockerrise-proc
@@ -184,3 +175,10 @@ services:
   #     privileged: true
   #     depends_on:
   #       - ros-master
+
+  octopus_telemetry:
+    image: ghcr.io/sonia-auv/octopus-telemetry:latest
+    container_name: octopus_telemetry
+    network_mode: host
+    depends_on: 
+      - sonia-ros-bridge
