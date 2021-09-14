@@ -8,8 +8,6 @@ services:
     environment:
       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
       - ROS_IP=${ADRESS_IP}
-    ports:
-      - ${ADRESS_IP}:11311:11311
     command: stdbuf -o L roscore
   
   sonia-ros-bridge:
@@ -19,8 +17,6 @@ services:
       environment:
         - ROS_MASTER_URI=http://${ADRESS_IP}:11311
         - ROS_IP=${ADRESS_IP}
-      ports:
-        - "9090:9090"
       depends_on:
         - ros-master
       command:
@@ -187,9 +183,6 @@ services:
       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
     network_mode: host
     privileged: true
-    ports: 
-      - "22:22"
-      - "17725:17725"
     depends_on:
       - ros-master
 
