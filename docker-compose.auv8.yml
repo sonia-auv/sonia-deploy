@@ -78,6 +78,7 @@ services:
           - driver: nvidia
             device_ids: ['0']
             capabilities: [gpu]
+    command: stdbuf -o L roslaunch --wait proc_detection proc_detection.launch
 
   provider_dvl:
     image: docker.pkg.github.com/sonia-auv/provider_dvl/provider_dvl:arm64-perception-feature-tcp_pathfinder
