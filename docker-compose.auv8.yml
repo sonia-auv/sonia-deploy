@@ -75,6 +75,13 @@ services:
     privileged: true
     depends_on:
       - ros-master
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            device_ids: ['0']
+            capabilities: [gpu]
 
   provider_dvl:
     image: docker.pkg.github.com/sonia-auv/provider_dvl/provider_dvl:arm64-perception-feature-tcp_pathfinder
