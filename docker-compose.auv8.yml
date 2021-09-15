@@ -66,7 +66,7 @@ services:
 #      - ros-master
 
   provider_dvl:
-    image: ghcr.io/sonia-auv/provider_dvl/provider_dvl:arm64-perception-feature-pathfinder-dvl
+    image: ghcr.io/sonia-auv/provider_dvl/provider_dvl:arm64-perception-feature-tcp_pathfinder
     container_name: provider_dvl
     environment:
       - ROS_IP=${ADRESS_IP}
@@ -74,6 +74,7 @@ services:
     network_mode: host
     depends_on:
       - ros-master
+    command: stdbuf -o L roslaunch --wait provider_dvl provider_dvl.launch  
 
 #  provider_hydrophone:
 #    image: ghcr.io/sonia-auv/provider_hydrophone/provider_hydrophone:arm64-perception-latest
@@ -82,7 +83,7 @@ services:
 #      - ros-master
 
   provider_thruster:
-    image: ghcr.io/sonia-auv/provider_thruster/provider_thruster:arm64-perception-feature-matlab-proc-control
+    image: ghcr.io/sonia-auv/provider_thruster/provider_thruster:arm64-perception-develop
     container_name: provider_thruster
     environment:
       - ROS_IP=${ADRESS_IP}
@@ -93,7 +94,7 @@ services:
       - ros-master
 
   provider_imu:
-    image: ghcr.io/sonia-auv/provider_imu/provider_imu:arm64-perception-feature-vn-100
+    image: ghcr.io/sonia-auv/provider_imu/provider_imu:arm64-perception-develop
     container_name: provider_imu
     environment:
     - ROS_IP=${ADRESS_IP}
@@ -106,7 +107,7 @@ services:
       - ros-master
 
   provider_power:
-    image: ghcr.io/sonia-auv/provider_power/provider_power:arm64-perception-feature-log-auv8
+    image: ghcr.io/sonia-auv/provider_power/provider_power:arm64-perception-develop
     container_name: provider_power
     environment:
       - ROS_IP=${ADRESS_IP}
@@ -128,7 +129,7 @@ services:
 #      - ros-master
 
   interface_rs485:
-    image: ghcr.io/sonia-auv/interface_rs485/interface_rs485:arm64-perception-feature-interface-docker
+    image: ghcr.io/sonia-auv/interface_rs485/interface_rs485:arm64-perception-develop
     container_name: interface_rs485
     environment:
       - ROS_IP=${ADRESS_IP}
@@ -156,9 +157,9 @@ services:
     privileged: true
     devices:
       - /dev/CAM0:/dev/CAM0
+      - /dev/CAM1:/dev/CAM1
     depends_on:
       - ros-master
-#    command: stdbuf -o L roslaunch --wait provider_vision provider_vision.launch
 
   simulink_monitor:
     image: ghcr.io/sonia-auv/simulink-monitor/simulink-monitor:arm64-perception-latest
