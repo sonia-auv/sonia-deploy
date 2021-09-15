@@ -21,6 +21,22 @@ services:
         - rosbridge_server
         - rosbridge_websocket.launch
 
+  octopus_telemetry:
+    image: ghcr.io/sonia-auv/octopus-telemetry:local
+    container_name: octopus_telemetry
+    network_mode: host
+    depends_on: 
+      - sonia-ros-bridge
+
+  proc_image_processing:
+    image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:x86-perception-latest
+    container_name: proc_image_processing
+    network_mode: host
+    depends_on:
+      - ros-master
+    volumes: 
+      - ~/Bags:/bags
+
 #  provider_kill_mission:
 #    image: ghcr.io/sonia-auv/provider_kill_mission/provider_kill_mission:x86-perception-latest
 #    network_mode: host
@@ -132,12 +148,6 @@ services:
 #    depends_on:
 #      - ros-master
 
-  proc_image_processing:
-    image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:x86-perception-latest
-    container_name: proc_image_processing
-    network_mode: host
-    depends_on:
-      - ros-master
 
 #  provider_vision:
 #    image: ghcr.io/sonia-auv/provider_vision/provider_vision:x86-perception-feature-testing-modif
@@ -178,9 +188,3 @@ services:
   #     depends_on:
   #       - ros-master
 
-  octopus_telemetry:
-    image: ghcr.io/sonia-auv/octopus-telemetry:local
-    container_name: octopus_telemetry
-    network_mode: host
-    depends_on: 
-      - sonia-ros-bridge
