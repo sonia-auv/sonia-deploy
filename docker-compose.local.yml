@@ -13,8 +13,6 @@ services:
       network_mode: host
       depends_on:
         - ros-master
-      environment: 
-        - ADRESS=
       command:
         - roslaunch
         - --wait
