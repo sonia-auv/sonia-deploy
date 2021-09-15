@@ -62,7 +62,7 @@ services:
 #      - ros-master
 
   proc_detection:
-    image: ghcr.io/sonia-auv/proc_detection/proc_detection:arm64-perception-feature-docker_integration
+    image: ghcr.io/sonia-auv/proc_detection:arm64-feature
     container_name: proc_detection
     environment:
       - ROS_IP=${ADRESS_IP}
