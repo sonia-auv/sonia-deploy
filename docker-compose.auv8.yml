@@ -8,8 +8,6 @@ services:
     environment:
       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
       - ROS_IP=${ADRESS_IP}
-    ports:
-      - ${ADRESS_IP}:11311:11311
     command: stdbuf -o L roscore
   
   sonia-ros-bridge:
@@ -19,8 +17,6 @@ services:
       environment:
         - ROS_MASTER_URI=http://${ADRESS_IP}:11311
         - ROS_IP=${ADRESS_IP}
-      ports:
-        - "9090:9090"
       depends_on:
         - ros-master
       command:
@@ -29,11 +25,15 @@ services:
         - rosbridge_server
         - rosbridge_websocket.launch
 
-#  provider_kill_mission:
-#    image: ghcr.io/sonia-auv/provider_kill_mission/provider_kill_mission:arm64-perception-latest
-#    network_mode: host
-#    depends_on:
-#      - ros-master
+  provider_kill_mission:
+    image: ghcr.io/sonia-auv/provider_kill_mission/provider_kill_mission:arm64-perception-latest
+    container_name: provider_kill_mission
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+    network_mode: host
+    depends_on:
+      - ros-master
 
 #  proc_mapping:
 #    image: ghcr.io/sonia-auv/proc_mapping/proc_mapping:arm64-perception-latest
@@ -65,6 +65,25 @@ services:
 #    depends_on:
 #      - ros-master
 
+#  proc_detection:
+#    image: ghcr.io/sonia-auv/proc_detection:arm64-feature
+#    container_name: proc_detection
+#    environment:
+#      - ROS_IP=${ADRESS_IP}
+#      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+#    network_mode: host
+#    privileged: true
+#    depends_on:
+#      - ros-master
+#    deploy:
+#      resources:
+#        reservations:
+#          devices:
+#          - driver: nvidia
+#            device_ids: ['0']
+#            capabilities: [gpu]
+#    command: stdbuf -o L roslaunch --wait proc_detection proc_detection.launch
+
   provider_dvl:
     image: ghcr.io/sonia-auv/provider_dvl/provider_dvl:arm64-perception-feature-tcp_pathfinder
     container_name: provider_dvl
@@ -74,7 +93,6 @@ services:
     network_mode: host
     depends_on:
       - ros-master
-    command: stdbuf -o L roslaunch --wait provider_dvl provider_dvl.launch  
 
 #  provider_hydrophone:
 #    image: ghcr.io/sonia-auv/provider_hydrophone/provider_hydrophone:arm64-perception-latest
@@ -89,7 +107,6 @@ services:
       - ROS_IP=${ADRESS_IP}
       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
     network_mode: host
-    privileged: true
     depends_on:
       - ros-master
 
@@ -141,11 +158,15 @@ services:
     depends_on:
       - ros-master
 
-  #proc_image_processing:
-   # image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:arm64-perception-latest
-   # network_mode: host
-   # depends_on:
-   #   - ros-master
+  proc_image_processing:
+    image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:arm64-perception-latest
+    container_name: proc_image_processing
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+    network_mode: host
+    depends_on:
+      - ros-master
 
   provider_vision:
     image: ghcr.io/sonia-auv/provider_vision/provider_vision:arm64-perception-develop
@@ -169,14 +190,11 @@ services:
       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
     network_mode: host
     privileged: true
-    ports: 
-      - "22:22"
-      - "17725:17725"
     depends_on:
       - ros-master
 
   octopus_telemetry:
-    image: ghcr.io/sonia-auv/octopus-telemetry:latest
+    image: ghcr.io/sonia-auv/octopus-telemetry:develop
     container_name: octopus_telemetry
     network_mode: host
     depends_on: 
