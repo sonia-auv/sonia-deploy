@@ -26,7 +26,7 @@ services:
         - rosbridge_websocket.launch
 
   provider_kill_mission:
-    image: ghcr.io/sonia-auv/provider_kill_mission/provider_kill_mission:arm64-perception-latest
+    image: ghcr.io/sonia-auv/provider_kill_mission/provider_kill_mission:arm64-perception-fix-nump-package
     container_name: provider_kill_mission
     environment:
       - ROS_IP=${ADRESS_IP}
