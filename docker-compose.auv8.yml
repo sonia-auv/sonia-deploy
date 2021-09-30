@@ -133,6 +133,16 @@ services:
     depends_on:
       - ros-master
 
+  provider_system:
+    image: ghcr.io/sonia-auv/provider_power/provider_power:arm64-perception-feature-dockerize-node
+    container_name: provider_system
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311    
+    network_mode: host
+    depends_on:
+      - ros-master
+
 #  provider_actuators:
 #    image: ghcr.io/sonia-auv/provider_actuators/provider_actuators:arm64-perception-latest
 #    network_mode: host
