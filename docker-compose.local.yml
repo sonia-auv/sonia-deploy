@@ -202,7 +202,7 @@ services:
       command: stdbuf -o L roslaunch --wait provider_underwater_com provider_underwater_com.launch
 
   proc_underwater_com:
-      image: ghcr.io/sonia-auv/proc_underwater_com/proc_underwater_com:x86-perception-feature-start-node
+      image: ghcr.io/sonia-auv/proc_underwater_com/proc_underwater_com:x86-perception-fix-salve-answer
       container_name: proc_underwater_com
       environment:
         - ROS_IP=${ADRESS_IP}
