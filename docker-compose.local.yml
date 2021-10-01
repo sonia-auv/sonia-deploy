@@ -187,7 +187,7 @@ services:
 #       - ros-master
 
   provider_underwater_com:
-      image: ghcr.io/sonia-auv/provider_underwater_com/provider_underwater_com:x86-perception-fix-clean-up
+      image: ghcr.io/sonia-auv/provider_underwater_com/provider_underwater_com:x86-perception-feature-master-non-blocking
       container_name: provider_underwater_com
       environment:
         - ROS_IP=${ADRESS_IP}
