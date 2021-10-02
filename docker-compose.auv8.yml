@@ -134,7 +134,7 @@ services:
       - ros-master
 
   provider_system:
-    image: ghcr.io/sonia-auv/provider_system/provider_system:arm64-perception-feature-dockerize-node
+    image: ghcr.io/sonia-auv/provider_system/provider_system:arm64-perception-develop
     container_name: provider_system
     environment:
       - ROS_IP=${ADRESS_IP}
