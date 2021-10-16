@@ -137,7 +137,7 @@ services:
       - ros-master
 
   provider_depth:
-    image: 
+    image: ghcr.io/sonia-auv/provider_depth/provider_depth:arm64-perception-fix
     container_name: provider_depth
     environment:
       - ROS_IP=${ADRESS_IP}
