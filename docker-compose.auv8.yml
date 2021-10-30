@@ -34,6 +34,11 @@ services:
       - ROS_IP=${ADRESS_IP}
     depends_on:
       - ros-master
+    command:
+      - roslaunch
+      - --wait
+      - flexbe_onboard
+      - behavior_onboard.launch
     volumes:
       - /home/sonia/sonia:/home/sonia/ros_sonia_ws/src
 
@@ -244,7 +249,7 @@ services:
       - ros-master
 
   octopus_telemetry:
-    image: ghcr.io/sonia-auv/octopus-telemetry:develop
+    image: ghcr.io/sonia-auv/octopus-telemetry:fix
     container_name: octopus_telemetry
     network_mode: host
     depends_on: 
