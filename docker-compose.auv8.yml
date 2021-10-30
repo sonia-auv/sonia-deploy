@@ -24,6 +24,18 @@ services:
         - --wait
         - rosbridge_server
         - rosbridge_websocket.launch
+  
+  sonia-flexbe:
+    image: ghcr.io/sonia-auv/sonia-flexbe/sonia-flexbe:arm64-perception-latest
+    container_name: sonia-flexbe
+    network_mode: host
+    environment:
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - ROS_IP=${ADRESS_IP}
+    depends_on:
+      - ros-master
+    volumes:
+      - /home/sonia/sonia:/home/sonia/ros_sonia_ws/src
 
   provider_kill_mission:
     image: ghcr.io/sonia-auv/provider_kill_mission/provider_kill_mission:arm64-perception-fix-nump-package
@@ -206,7 +218,7 @@ services:
     command: stdbuf -o L roslaunch --wait proc_image_processing proc_image_processing.launch
 
   provider_vision:
-    image: ghcr.io/sonia-auv/provider_vision/provider_vision:arm64-perception-develop
+    image: ghcr.io/sonia-auv/provider_vision/provider_vision:arm64-perception-feature-resize-two-cam
     container_name: provider_vision
     environment:
       - ROS_IP=${ADRESS_IP}
@@ -218,6 +230,7 @@ services:
       - /dev/CAM1:/dev/CAM1
     depends_on:
       - ros-master
+    command: stdbuf -o L roslaunch --wait provider_vision provider_vision.launch
 
   simulink_monitor:
     image: ghcr.io/sonia-auv/simulink-monitor/simulink-monitor:arm64-perception-latest
