@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3.3"
 
 services:
   ros-master:
@@ -8,16 +8,28 @@ services:
     command: stdbuf -o L roscore
 
   sonia-ros-bridge:
-      image: ghcr.io/sonia-auv/sonia-ros-bridge/sonia-ros-bridge:x86-perception-latest
-      container_name: sonia-ros-bridge
-      network_mode: host
-      depends_on:
-        - ros-master
-      command:
-        - roslaunch
-        - --wait
-        - rosbridge_server
-        - rosbridge_websocket.launch
+    image: ghcr.io/sonia-auv/sonia-ros-bridge/sonia-ros-bridge:x86-perception-latest
+    container_name: sonia-ros-bridge
+    network_mode: host
+    depends_on:
+      - ros-master
+    command:
+      - roslaunch
+      - --wait
+      - rosbridge_server
+      - rosbridge_websocket.launch
+
+  sonia-ros-tcp-endpoint:
+    image: ghcr.io/sonia-auv/sonia-ros-tcp-endpoint/sonia-ros-tcp-endpoint:x86-perception-latest
+    container_name: sonia-ros-tcp-endpoint
+    network_mode: host
+    depends_on:
+      - ros-master
+    command:
+      - roslaunch
+      - --wait
+      - ros_tcp_endpoint
+      - endpoint.launch
 
   octopus_telemetry:
     image: ghcr.io/sonia-auv/octopus-telemetry:local
@@ -27,7 +39,7 @@ services:
       - sonia-ros-bridge
 
   proc_image_processing:
-    image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:x86-perception-latest
+    image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:x86-perception-develop
     container_name: proc_image_processing
     network_mode: host
     depends_on:
