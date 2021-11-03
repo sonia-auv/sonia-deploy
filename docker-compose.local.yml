@@ -7,33 +7,57 @@ services:
     container_name: ros-master
     command: stdbuf -o L roscore
 
-  sonia-ros-bridge:
-      image: ghcr.io/sonia-auv/sonia-ros-bridge/sonia-ros-bridge:x86-perception-latest
-      container_name: sonia-ros-bridge
-      network_mode: host
-      depends_on:
-        - ros-master
-      command:
-        - roslaunch
-        - --wait
-        - rosbridge_server
-        - rosbridge_websocket.launch
-
-  octopus_telemetry:
-    image: ghcr.io/sonia-auv/octopus-telemetry:local
-    container_name: octopus_telemetry
+  provider_hydrophone:
+    image: ghcr.io/sonia-auv/provider_hydrophone/provider_hydrophone:arm64-perception-feature-setting-service
+    container_name: provider_hydrophone
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
     network_mode: host
-    depends_on: 
-      - sonia-ros-bridge
+    privileged: true
+    volumes:
+      - /dev/ttyUSB0:/dev/ttyUSB0
+    depends_on:
+      - ros-master
 
-  proc_image_processing:
-    image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:x86-perception-latest
-    container_name: proc_image_processing
+  proc_hydrophone:
+    image: ghcr.io/sonia-auv/proc_hydrophone/proc_hydrophone:arm64-perception-fix-update-docker
+    container_name: proc_hydrophone
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
     network_mode: host
     depends_on:
       - ros-master
-    volumes: 
-      - ~/Bags:/bags
+
+
+  # sonia-ros-bridge:
+  #     image: ghcr.io/sonia-auv/sonia-ros-bridge/sonia-ros-bridge:x86-perception-latest
+  #     container_name: sonia-ros-bridge
+  #     network_mode: host
+  #     depends_on:
+  #       - ros-master
+  #     command:
+  #       - roslaunch
+  #       - --wait
+  #       - rosbridge_server
+  #       - rosbridge_websocket.launch
+
+  # octopus_telemetry:
+  #   image: ghcr.io/sonia-auv/octopus-telemetry:local
+  #   container_name: octopus_telemetry
+  #   network_mode: host
+  #   depends_on: 
+  #     - sonia-ros-bridge
+
+  # proc_image_processing:
+  #   image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:x86-perception-latest
+  #   container_name: proc_image_processing
+  #   network_mode: host
+  #   depends_on:
+  #     - ros-master
+  #   volumes: 
+  #     - ~/Bags:/bags
 
 #  provider_kill_mission:
 #    image: ghcr.io/sonia-auv/provider_kill_mission/provider_kill_mission:x86-perception-latest
