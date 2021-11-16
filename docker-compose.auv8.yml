@@ -65,7 +65,7 @@ services:
 #      - ros-master
 
   proc_actuators:
-    image: ghcr.io/sonia-auv/proc_actuators/proc_actuators:x86-perception-fix-update-docker
+    image: ghcr.io/sonia-auv/proc_actuators/proc_actuators:arm64-perception-fix-update-docker
     container_name: proc_actuators
     environment:
       - ROS_IP=${ADRESS_IP}
@@ -181,7 +181,7 @@ services:
       - ros-master
 
   provider_actuators:
-    image: ghcr.io/sonia-auv/provider_actuators/provider_actuators:x86-perception-fix-update-docker
+    image: ghcr.io/sonia-auv/provider_actuators/provider_actuators:arm64-perception-fix-update-docker
     container_name: provider_actuators
     environment:
       - ROS_IP=${ADRESS_IP}
