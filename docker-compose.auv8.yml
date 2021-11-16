@@ -26,7 +26,7 @@ services:
         - rosbridge_websocket.launch
   
   sonia-flexbe:
-    image: ghcr.io/sonia-auv/sonia-flexbe/sonia-flexbe:arm64-perception-latest
+    image: ghcr.io/sonia-auv/sonia-flexbe/sonia-flexbe:arm64-perception-develop
     container_name: sonia-flexbe
     network_mode: host
     environment:
@@ -37,10 +37,10 @@ services:
     command:
       - roslaunch
       - --wait
-      - flexbe_onboard
-      - behavior_onboard.launch
+      - sonia_flexbe
+      - sonia_flexbe.launch
     volumes:
-      - /home/sonia/sonia:/home/sonia/ros_sonia_ws/src
+      - /home/sonia/sonia:/home/sonia/ros_sonia_ws/src/behaviors
 
   provider_kill_mission:
     image: ghcr.io/sonia-auv/provider_kill_mission/provider_kill_mission:arm64-perception-fix-nump-package
