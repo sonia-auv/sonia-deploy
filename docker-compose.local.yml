@@ -19,6 +19,18 @@ services:
         - rosbridge_server
         - rosbridge_websocket.launch
 
+  sonia-ros-tcp-endpoint:
+    image: ghcr.io/sonia-auv/sonia-ros-tcp-endpoint/sonia-ros-tcp-endpoint:x86-perception-latest
+    container_name: sonia-ros-tcp-endpoint
+    network_mode: host
+    depends_on:
+      - ros-master
+    command:
+      - roslaunch
+      - --wait
+      - ros_tcp_endpoint
+      - endpoint.launch
+      
   octopus_telemetry:
     image: ghcr.io/sonia-auv/octopus-telemetry:local
     container_name: octopus_telemetry
