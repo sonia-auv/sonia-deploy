@@ -24,9 +24,26 @@ services:
         - --wait
         - rosbridge_server
         - rosbridge_websocket.launch
+  
+  sonia-flexbe:
+    image: ghcr.io/sonia-auv/sonia-flexbe/sonia-flexbe:arm64-perception-latest
+    container_name: sonia-flexbe
+    network_mode: host
+    environment:
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - ROS_IP=${ADRESS_IP}
+    depends_on:
+      - ros-master
+    command:
+      - roslaunch
+      - --wait
+      - flexbe_onboard
+      - behavior_onboard.launch
+    volumes:
+      - /home/sonia/sonia:/home/sonia/ros_sonia_ws/src
 
   provider_kill_mission:
-    image: ghcr.io/sonia-auv/provider_kill_mission/provider_kill_mission:arm64-perception-latest
+    image: ghcr.io/sonia-auv/provider_kill_mission/provider_kill_mission:arm64-perception-fix-nump-package
     container_name: provider_kill_mission
     environment:
       - ROS_IP=${ADRESS_IP}
@@ -48,7 +65,7 @@ services:
 #      - ros-master
 
   proc_actuators:
-    image: ghcr.io/sonia-auv/proc_actuators/proc_actuators:x86-perception-fix-update-docker
+    image: ghcr.io/sonia-auv/proc_actuators/proc_actuators:arm64-perception-fix-update-docker
     container_name: proc_actuators
     environment:
       - ROS_IP=${ADRESS_IP}
@@ -70,21 +87,34 @@ services:
 #      - ros-master
 
 #  proc_detection:
-#    image: ghcr.io/sonia-auv/proc_detection:arm64-feature
+#    image: ghcr.io/sonia-auv/proc_detection/proc_detection:arm64-perception-feature-tensorflow-gpu
 #    container_name: proc_detection
 #    environment:
 #      - ROS_IP=${ADRESS_IP}
 #      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+#      - PYTHONUNBUFFERED=1
+#      - PYTHON_EXECUTABLE=/usr/bin/python3
+#      - NVIDIA_VISIBLE_DEVICES=all
 #    network_mode: host
 #    privileged: true
 #    depends_on:
 #      - ros-master
+#    volumes:
+#      - /home/sonia/ssd/object_detection:/home/sonia/ros_sonia_ws/src/proc_detection/external
+#      - /usr/lib/aarch64-linux-gnu/tegra:/usr/lib/aarch64-linux-gnu/tegra
+#      - /usr/local/cuda-10.2/lib64:/usr/local/cuda-10.2/lib64
+#      - /proc:/proc
+#    devices:
+#      - /dev/nvhost-ctrl:/dev/nvhost-ctrl 
+#      - /dev/nvhost-ctrl-gpu:/dev/nvhost-ctrl-gpu
+#      - /dev/nvhost-prof-gpu:/dev/nvhost-prof-gpu 
+#      - /dev/nvmap:/dev/nvmap 
+#      - /dev/nvhost-gpu:/dev/nvhost-gpu
 #    deploy:
 #      resources:
 #        reservations:
 #          devices:
 #          - driver: nvidia
-#            device_ids: ['0']
 #            capabilities: [gpu]
 #    command: stdbuf -o L roslaunch --wait proc_detection proc_detection.launch
 
@@ -127,6 +157,19 @@ services:
     depends_on:
       - ros-master
 
+  provider_depth:
+    image: ghcr.io/sonia-auv/provider_depth/provider_depth:arm64-perception-fix
+    container_name: provider_depth
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+    network_mode: host
+    privileged: true
+    volumes:
+      - /dev/DEPTH:/dev/DEPTH
+    depends_on:
+      - ros-master
+
   provider_power:
     image: ghcr.io/sonia-auv/provider_power/provider_power:arm64-perception-develop
     container_name: provider_power
@@ -138,8 +181,18 @@ services:
       - ros-master
 
   provider_actuators:
-    image: ghcr.io/sonia-auv/provider_actuators/provider_actuators:x86-perception-fix-update-docker
+    image: ghcr.io/sonia-auv/provider_actuators/provider_actuators:arm64-perception-fix-update-docker
     container_name: provider_actuators
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311    
+    network_mode: host
+    depends_on:
+      - ros-master
+      
+  provider_system:
+    image: ghcr.io/sonia-auv/provider_system/provider_system:arm64-perception-develop
+    container_name: provider_system
     environment:
       - ROS_IP=${ADRESS_IP}
       - ROS_MASTER_URI=http://${ADRESS_IP}:11311    
@@ -167,7 +220,7 @@ services:
       - ros-master
 
   proc_image_processing:
-    image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:arm64-perception-latest
+    image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:arm64-perception-feature-rename-deep_detector
     container_name: proc_image_processing
     environment:
       - ROS_IP=${ADRESS_IP}
@@ -175,9 +228,10 @@ services:
     network_mode: host
     depends_on:
       - ros-master
+    command: stdbuf -o L roslaunch --wait proc_image_processing proc_image_processing.launch
 
   provider_vision:
-    image: ghcr.io/sonia-auv/provider_vision/provider_vision:arm64-perception-develop
+    image: ghcr.io/sonia-auv/provider_vision/provider_vision:arm64-perception-feature-resize-two-cam
     container_name: provider_vision
     environment:
       - ROS_IP=${ADRESS_IP}
@@ -189,6 +243,7 @@ services:
       - /dev/CAM1:/dev/CAM1
     depends_on:
       - ros-master
+    command: stdbuf -o L roslaunch --wait provider_vision provider_vision.launch
 
   simulink_monitor:
     image: ghcr.io/sonia-auv/simulink-monitor/simulink-monitor:arm64-perception-latest
@@ -202,7 +257,7 @@ services:
       - ros-master
 
   octopus_telemetry:
-    image: ghcr.io/sonia-auv/octopus-telemetry:develop
+    image: ghcr.io/sonia-auv/octopus-telemetry:fix
     container_name: octopus_telemetry
     network_mode: host
     depends_on: 
