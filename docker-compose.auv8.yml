@@ -26,7 +26,7 @@ services:
         - rosbridge_websocket.launch
   
   sonia-flexbe:
-    image: ghcr.io/sonia-auv/sonia-flexbe/sonia-flexbe:arm64-perception-latest
+    image: ghcr.io/sonia-auv/sonia-flexbe/sonia-flexbe:arm64-perception-develop
     container_name: sonia-flexbe
     network_mode: host
     environment:
@@ -37,10 +37,10 @@ services:
     command:
       - roslaunch
       - --wait
-      - flexbe_onboard
-      - behavior_onboard.launch
+      - sonia_flexbe
+      - sonia_flexbe.launch
     volumes:
-      - /home/sonia/sonia:/home/sonia/ros_sonia_ws/src
+      - /home/sonia/sonia:/home/sonia/ros_sonia_ws/src/behaviors
 
   provider_kill_mission:
     image: ghcr.io/sonia-auv/provider_kill_mission/provider_kill_mission:arm64-perception-fix-nump-package
@@ -212,12 +212,14 @@ services:
       - ros-master
 
   proc_image_processing:
-    image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:arm64-perception-feature-rename-deep_detector
+    image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:arm64-perception-feature-move-filterchain-config
     container_name: proc_image_processing
     environment:
       - ROS_IP=${ADRESS_IP}
       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
     network_mode: host
+    volumes:
+      - /home/sonia/ssd/config_filterchain:/home/sonia/ros_sonia_ws/src/proc_image_processing/config
     depends_on:
       - ros-master
     command: stdbuf -o L roslaunch --wait proc_image_processing proc_image_processing.launch
@@ -249,20 +251,18 @@ services:
       - ros-master
 
   octopus_telemetry:
-    image: ghcr.io/sonia-auv/octopus-telemetry:fix
+    image: ghcr.io/sonia-auv/octopus-telemetry:feature
     container_name: octopus_telemetry
     network_mode: host
     depends_on: 
       - sonia-ros-bridge
 
-  # proc_control:
-  #     image: ghcr.io/sonia-auv/proc_control/proc_control:arm64-perception-feature-auv8-dockerrise-proc
-  #     container_name: proc_control
-  #     environment:
-  #       - ROS_IP=${ADRESS_IP}
-  #       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-  #     network_mode: host
-  #     privileged: true
-  #     depends_on:
-  #       - ros-master
-
+  proc_control:
+    image: ghcr.io/sonia-auv/proc_control/proc_control:arm64-perception-feature-set-mode-32
+    container_name: proc_control
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+    network_mode: host
+    depends_on:
+      - ros-master
