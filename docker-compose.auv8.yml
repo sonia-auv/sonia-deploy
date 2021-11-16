@@ -251,20 +251,18 @@ services:
       - ros-master
 
   octopus_telemetry:
-    image: ghcr.io/sonia-auv/octopus-telemetry:develop
+    image: ghcr.io/sonia-auv/octopus-telemetry:feature
     container_name: octopus_telemetry
     network_mode: host
     depends_on: 
       - sonia-ros-bridge
 
-  # proc_control:
-  #     image: ghcr.io/sonia-auv/proc_control/proc_control:arm64-perception-feature-auv8-dockerrise-proc
-  #     container_name: proc_control
-  #     environment:
-  #       - ROS_IP=${ADRESS_IP}
-  #       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-  #     network_mode: host
-  #     privileged: true
-  #     depends_on:
-  #       - ros-master
-
+  proc_control:
+    image: ghcr.io/sonia-auv/proc_control/proc_control:arm64-perception-feature-set-mode-32
+    container_name: proc_control
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+    network_mode: host
+    depends_on:
+      - ros-master
