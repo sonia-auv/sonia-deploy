@@ -39,7 +39,7 @@ services:
       - sonia-ros-bridge
 
   proc_image_processing:
-    image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:x86-perception-latest
+    image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:x86-perception-develop
     container_name: proc_image_processing
     network_mode: host
     depends_on:
@@ -65,11 +65,15 @@ services:
 #    depends_on:
 #      - ros-master
 
-#  proc_actuators:
-#    image: ghcr.io/sonia-auv/proc_actuators/proc_actuators:x86-perception-latest
-#    network_mode: host
-#    depends_on:
-#      - ros-master
+  proc_actuators:
+    image: ghcr.io/sonia-auv/proc_actuators/proc_actuators:x86-perception-fix-update-docker
+    container_name: proc_actuators
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311    
+    network_mode: host
+    depends_on:
+      - ros-master
 
 #  proc_hydrophone:
 #    image: ghcr.io/sonia-auv/proc_hydrophone/proc_hydrophone:x86-perception-latest
@@ -133,11 +137,15 @@ services:
 #    depends_on:
 #      - ros-master
 
-#  provider_actuators:
-#    image: ghcr.io/sonia-auv/provider_actuators/provider_actuators:x86-perception-latest
-#    network_mode: host
-#    depends_on:
-#      - ros-master
+  provider_actuators:
+    image: ghcr.io/sonia-auv/provider_actuators/provider_actuators:x86-perception-fix-update-docker
+    container_name: provider_actuators
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311    
+    network_mode: host
+    depends_on:
+      - ros-master
 
 #  provider_sonar:
 #   image: ghcr.io/sonia-auv/provider_sonar/provider_sonar:x86-perception-latest
@@ -145,18 +153,19 @@ services:
 #    depends_on:
 #      - ros-master
 
-#  interface_rs485:
-#    image: ghcr.io/sonia-auv/interface_rs485/interface_rs485:x86-perception-feature-interface-docker
-#    container_name: interface_rs485
-#    environment:
-#      - ROS_IP=${ADRESS_IP}
-#      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-#    network_mode: host
-#    privileged: true
-#    volumes:
-#      - /dev/RS485:/dev/RS485
-#    depends_on:
-#      - ros-master
+  interface_rs485:
+    image: ghcr.io/sonia-auv/interface_rs485/interface_rs485:x86-perception-feature-local-debug
+    container_name: interface_rs485
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - AUV=${AUV}
+    network_mode: host
+    privileged: true
+    volumes:
+     - /dev/ttyUSB0:/dev/ttyUSB0
+    depends_on:
+     - ros-master
 
 
 #  provider_vision:
@@ -187,14 +196,39 @@ services:
 #      depends_on:
 #        - ros-master
 
-  # proc_control:
-  #     image: ghcr.io/sonia-auv/proc_control/proc_control:x86-perception-feature-auv8-dockerrise-proc
-  #     container_name: proc_control
+# proc_control:
+#     image: ghcr.io/sonia-auv/proc_control/proc_control:x86-perception-feature-auv8-dockerrise-proc
+#     container_name: proc_control
+#     environment:
+#       - ROS_IP=${ADRESS_IP}
+#       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+#     network_mode: host
+#     privileged: true
+#     depends_on:
+#       - ros-master
+
+  # provider_underwater_com:
+  #     image: ghcr.io/sonia-auv/provider_underwater_com/provider_underwater_com:x86-perception-fix-refactor-driver
+  #     container_name: provider_underwater_com
   #     environment:
   #       - ROS_IP=${ADRESS_IP}
   #       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
   #     network_mode: host
   #     privileged: true
+  #     devices:
+  #       - /dev/ttyUSB0:/dev/ttyUSB0
   #     depends_on:
   #       - ros-master
+  #     command: stdbuf -o L roslaunch --wait provider_underwater_com provider_underwater_com.launch
 
+  # proc_underwater_com:
+  #     image: ghcr.io/sonia-auv/proc_underwater_com/proc_underwater_com:x86-perception-develop
+  #     container_name: proc_underwater_com
+  #     environment:
+  #       - ROS_IP=${ADRESS_IP}
+  #       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+  #       - AUV=${AUV}
+  #     network_mode: host
+  #     depends_on:
+  #       - ros-master
+  #     command: stdbuf -o L roslaunch --wait proc_underwater_com proc_underwater_com.launch
