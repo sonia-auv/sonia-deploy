@@ -26,14 +26,14 @@ services:
     depends_on: 
       - sonia-ros-bridge
 
-#  proc_image_processing:
-#    image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:x86-perception-latest
-#    container_name: proc_image_processing
-#    network_mode: host
-#    depends_on:
-#      - ros-master
-#    volumes: 
-#      - ~/Bags:/bags
+  proc_image_processing:
+    image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:x86-perception-develop
+    container_name: proc_image_processing
+    network_mode: host
+    depends_on:
+      - ros-master
+    volumes: 
+      - ~/Bags:/bags
 
 #  provider_kill_mission:
 #    image: ghcr.io/sonia-auv/provider_kill_mission/provider_kill_mission:x86-perception-latest
