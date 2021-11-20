@@ -43,7 +43,7 @@ services:
       - /home/sonia/sonia:/home/sonia/ros_sonia_ws/src/behaviors
 
   provider_kill_mission:
-    image: ghcr.io/sonia-auv/provider_kill_mission/provider_kill_mission:arm64-perception-fix-nump-package
+    image: ghcr.io/sonia-auv/provider_kill_mission/provider_kill_mission:arm64-perception-develop
     container_name: provider_kill_mission
     environment:
       - ROS_IP=${ADRESS_IP}
@@ -65,7 +65,7 @@ services:
 #      - ros-master
 
   proc_actuators:
-    image: ghcr.io/sonia-auv/proc_actuators/proc_actuators:arm64-perception-fix-update-docker
+    image: ghcr.io/sonia-auv/proc_actuators/proc_actuators:arm64-perception-develop
     container_name: proc_actuators
     environment:
       - ROS_IP=${ADRESS_IP}
@@ -116,15 +116,11 @@ services:
 #          devices:
 #          - driver: nvidia
 #            capabilities: [gpu]
-#    command: stdbuf -o L roslaunch --wait proc_detection proc_detection.launch
-
-  provider_dvl:
-    image: ghcr.io/sonia-auv/provider_dvl/provider_dvl:arm64-perception-feature-tcp_pathfinder
-    container_name: provider_dvl
+#    command: stdbuf -o L roslaunch --wait proc_detection proc_detection.launchfilterchaifilterchaifilterchaifilterchai
     environment:
       - ROS_IP=${ADRESS_IP}
       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-    network_mode: host
+    network_mode: hostfilterchai
     depends_on:
       - ros-master
 
@@ -158,7 +154,7 @@ services:
       - ros-master
 
   provider_depth:
-    image: ghcr.io/sonia-auv/provider_depth/provider_depth:arm64-perception-fix
+    image: ghcr.io/sonia-auv/provider_depth/provider_depth:arm64-perception-develop
     container_name: provider_depth
     environment:
       - ROS_IP=${ADRESS_IP}
@@ -181,7 +177,7 @@ services:
       - ros-master
 
   provider_actuators:
-    image: ghcr.io/sonia-auv/provider_actuators/provider_actuators:arm64-perception-fix-update-docker
+    image: ghcr.io/sonia-auv/provider_actuators/provider_actuators:arm64-perception-develop
     container_name: provider_actuators
     environment:
       - ROS_IP=${ADRESS_IP}
@@ -259,14 +255,14 @@ services:
       - ros-master
 
   octopus_telemetry:
-    image: ghcr.io/sonia-auv/octopus-telemetry:feature
+    image: ghcr.io/sonia-auv/octopus-telemetry:develop
     container_name: octopus_telemetry
     network_mode: host
     depends_on: 
       - sonia-ros-bridge
 
   proc_control:
-    image: ghcr.io/sonia-auv/proc_control/proc_control:arm64-perception-feature-set-mode-32
+    image: ghcr.io/sonia-auv/proc_control/proc_control:arm64-perception-develop
     container_name: proc_control
     environment:
       - ROS_IP=${ADRESS_IP}
