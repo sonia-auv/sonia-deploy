@@ -72,6 +72,16 @@ services:
     depends_on:
       - ros-master
 
+  provider_dvl:
+    image: ghcr.io/sonia-auv/provider_dvl/provider_dvl:arm64-perception-feature-tcp_pathfinder
+    container_name: provider_dvl
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+    network_mode: host
+    depends_on:
+      - ros-master
+
   provider_imu:
     image: ghcr.io/sonia-auv/provider_imu/provider_imu:arm64-perception-develop
     container_name: provider_imu
