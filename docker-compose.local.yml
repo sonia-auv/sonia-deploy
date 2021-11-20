@@ -103,16 +103,16 @@ services:
 #    depends_on:
 #      - ros-master
 
-#  provider_thruster:
-#    image: ghcr.io/sonia-auv/provider_thruster/provider_thruster:x86-perception-feature-matlab-proc-control
-#    container_name: provider_thruster
-#    environment:
-#      - ROS_IP=${ADRESS_IP}
-#      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-#    network_mode: host
-#    privileged: true
-#    depends_on:
-#      - ros-master
+  provider_thruster:
+    image: ghcr.io/sonia-auv/provider_thruster/provider_thruster:x86-perception-develop
+    container_name: provider_thruster
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+    network_mode: host
+    privileged: true
+    depends_on:
+      - ros-master
 
 #  provider_imu:
 #    image: ghcr.io/sonia-auv/provider_imu/provider_imu:x86-perception-feature-vn-100
@@ -127,15 +127,15 @@ services:
 #    depends_on:
 #      - ros-master
 
-#  provider_power:
-#    image: ghcr.io/sonia-auv/provider_power/provider_power:x86-perception-feature-log-auv8
-#    container_name: provider_power
-#    environment:
-#      - ROS_IP=${ADRESS_IP}
-#      - ROS_MASTER_URI=http://${ADRESS_IP}:11311    
-#    network_mode: host
-#    depends_on:
-#      - ros-master
+  provider_power:
+    image: ghcr.io/sonia-auv/provider_power/provider_power:x86-perception-develop
+    container_name: provider_power
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311    
+    network_mode: host
+    depends_on:
+      - ros-master
 
   provider_actuators:
     image: ghcr.io/sonia-auv/provider_actuators/provider_actuators:x86-perception-fix-update-docker
