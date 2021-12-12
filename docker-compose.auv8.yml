@@ -74,11 +74,15 @@ services:
     depends_on:
       - ros-master
 
-#  proc_hydrophone:
-#    image: ghcr.io/sonia-auv/proc_hydrophone/proc_hydrophone:arm64-perception-latest
-#    network_mode: host
-#    depends_on:
-#      - ros-master
+  proc_hydrophone:
+    image: ghcr.io/sonia-auv/proc_hydrophone/proc_hydrophone:arm64-perception-fix-update-docker
+    container_name: proc_hydrophone
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+    network_mode: host
+    depends_on:
+      - ros-master
 
 #  proc_sonar:
 #    image: ghcr.io/sonia-auv/proc_sonar/proc_sonar:arm64-perception-latest
@@ -128,11 +132,18 @@ services:
     depends_on:
       - ros-master
 
-#  provider_hydrophone:
-#    image: ghcr.io/sonia-auv/provider_hydrophone/provider_hydrophone:arm64-perception-latest
-#    network_mode: host
-#    depends_on:
-#      - ros-master
+  provider_hydrophone:
+    image: ghcr.io/sonia-auv/provider_hydrophone/provider_hydrophone:arm64-perception-feature-setting-service
+    container_name: provider_hydrophone
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+    network_mode: host
+    privileged: true
+    volumes:
+      - /dev/HYDRO:/dev/HYDRO
+    depends_on:
+      - ros-master
 
   provider_thruster:
     image: ghcr.io/sonia-auv/provider_thruster/provider_thruster:arm64-perception-develop
