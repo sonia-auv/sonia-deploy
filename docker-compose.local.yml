@@ -216,28 +216,28 @@ services:
 #     depends_on:
 #       - ros-master
 
-  # provider_underwater_com:
-  #     image: ghcr.io/sonia-auv/provider_underwater_com/provider_underwater_com:x86-perception-fix-refactor-driver
-  #     container_name: provider_underwater_com
-  #     environment:
-  #       - ROS_IP=${ADRESS_IP}
-  #       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-  #     network_mode: host
-  #     privileged: true
-  #     devices:
-  #       - /dev/ttyUSB0:/dev/ttyUSB0
-  #     depends_on:
-  #       - ros-master
-  #     command: stdbuf -o L roslaunch --wait provider_underwater_com provider_underwater_com.launch
+  provider_underwater_com:
+      image: ghcr.io/sonia-auv/provider_underwater_com/provider_underwater_com:x86-perception-fix-refactor-driver
+      container_name: provider_underwater_com
+      environment:
+        - ROS_IP=${ADRESS_IP}
+        - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      network_mode: host
+      privileged: true
+      devices:
+        - /dev/ttyUSB0:/dev/ttyUSB0
+      depends_on:
+        - ros-master
+      command: stdbuf -o L roslaunch --wait provider_underwater_com provider_underwater_com.launch
 
-  # proc_underwater_com:
-  #     image: ghcr.io/sonia-auv/proc_underwater_com/proc_underwater_com:x86-perception-develop
-  #     container_name: proc_underwater_com
-  #     environment:
-  #       - ROS_IP=${ADRESS_IP}
-  #       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-  #       - AUV=${AUV}
-  #     network_mode: host
-  #     depends_on:
-  #       - ros-master
-  #     command: stdbuf -o L roslaunch --wait proc_underwater_com proc_underwater_com.launch
+  proc_underwater_com:
+      image: ghcr.io/sonia-auv/proc_underwater_com/proc_underwater_com:x86-perception-develop
+      container_name: proc_underwater_com
+      environment:
+        - ROS_IP=${ADRESS_IP}
+        - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+        - AUV=${AUV}
+      network_mode: host
+      depends_on:
+        - ros-master
+      command: stdbuf -o L roslaunch --wait proc_underwater_com proc_underwater_com.launch
