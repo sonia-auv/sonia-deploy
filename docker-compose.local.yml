@@ -5,11 +5,17 @@ services:
     network_mode: host
     image: ros:melodic-ros-core
     container_name: ros-master
+    environment:
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - ROS_IP=${ADRESS_IP}
     command: stdbuf -o L roscore
 
   sonia-ros-bridge:
       image: ghcr.io/sonia-auv/sonia-ros-bridge/sonia-ros-bridge:x86-perception-latest
       container_name: sonia-ros-bridge
+      environment:
+        - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+        - ROS_IP=${ADRESS_IP}
       network_mode: host
       depends_on:
         - ros-master
@@ -41,6 +47,9 @@ services:
   proc_image_processing:
     image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:x86-perception-develop
     container_name: proc_image_processing
+    environment:
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - ROS_IP=${ADRESS_IP}
     network_mode: host
     depends_on:
        - ros-master
