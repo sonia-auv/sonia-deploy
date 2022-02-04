@@ -263,3 +263,15 @@ services:
   #     depends_on:
   #       - ros-master
   #     command: stdbuf -o L roslaunch --wait proc_underwater_com proc_underwater_com.launch
+
+  proc_planner:
+    image: ghcr.io/sonia-auv/proc_planner/proc_planner:x86-perception-fix-basic-repo
+    container_name: proc_planner
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - AUV=${AUV}
+    network_mode: host
+    privileged: true
+    depends_on:
+      - ros-master
