@@ -129,16 +129,16 @@ services:
   #   depends_on:
   #     - ros-master
 
-  provider_thruster:
-    image: ghcr.io/sonia-auv/provider_thruster/provider_thruster:x86-perception-develop
-    container_name: provider_thruster
-    environment:
-      - ROS_IP=${ADRESS_IP}
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-    network_mode: host
-    privileged: true
-    depends_on:
-      - ros-master
+  # provider_thruster:
+  #   image: ghcr.io/sonia-auv/provider_thruster/provider_thruster:x86-perception-develop
+  #   container_name: provider_thruster
+  #   environment:
+  #     - ROS_IP=${ADRESS_IP}
+  #     - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+  #   network_mode: host
+  #   privileged: true
+  #   depends_on:
+  #     - ros-master
 
   # provider_imu:
   #   image: ghcr.io/sonia-auv/provider_imu/provider_imu:x86-perception-develop
@@ -153,15 +153,15 @@ services:
   #   depends_on:
   #     - ros-master
 
-  provider_power:
-    image: ghcr.io/sonia-auv/provider_power/provider_power:x86-perception-develop
-    container_name: provider_power
-    environment:
-      - ROS_IP=${ADRESS_IP}
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311    
-    network_mode: host
-    depends_on:
-      - ros-master
+  # provider_power:
+  #   image: ghcr.io/sonia-auv/provider_power/provider_power:x86-perception-develop
+  #   container_name: provider_power
+  #   environment:
+  #     - ROS_IP=${ADRESS_IP}
+  #     - ROS_MASTER_URI=http://${ADRESS_IP}:11311    
+  #   network_mode: host
+  #   depends_on:
+  #     - ros-master
 
   # provider_actuators:
   #   image: ghcr.io/sonia-auv/provider_actuators/provider_actuators:x86-perception-develop
@@ -183,19 +183,19 @@ services:
   #   depends_on:
   #     - ros-master
 
-  interface_rs485:
-    image: ghcr.io/sonia-auv/interface_rs485/interface_rs485:x86-perception-feature-local-debug
-    container_name: interface_rs485
-    environment:
-      - ROS_IP=${ADRESS_IP}
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-      - AUV=${AUV}
-    network_mode: host
-    privileged: true
-    volumes:
-     - /dev/ttyUSB0:/dev/ttyUSB0
-    depends_on:
-     - ros-master
+  # interface_rs485:
+  #   image: ghcr.io/sonia-auv/interface_rs485/interface_rs485:x86-perception-feature-local-debug
+  #   container_name: interface_rs485
+  #   environment:
+  #     - ROS_IP=${ADRESS_IP}
+  #     - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+  #     - AUV=${AUV}
+  #   network_mode: host
+  #   privileged: true
+  #   volumes:
+  #    - /dev/ttyUSB0:/dev/ttyUSB0
+  #   depends_on:
+  #    - ros-master
 
   # provider_vision:
   #   image: ghcr.io/sonia-auv/provider_vision/provider_vision:x86-perception-feature-testing-modif
@@ -226,17 +226,17 @@ services:
   #   depends_on:
   #     - ros-master
 
-  proc_control:
-    image: ghcr.io/sonia-auv/proc_control/proc_control:x86-perception-feature-auv8-dockerrise-proc
-    container_name: proc_control
-    environment:
-      - ROS_IP=${ADRESS_IP}
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-      - AUV=${AUV}
-    network_mode: host
-    privileged: true
-    depends_on:
-      - ros-master
+  # proc_control:
+  #   image: ghcr.io/sonia-auv/proc_control/proc_control:x86-perception-feature-auv8-dockerrise-proc
+  #   container_name: proc_control
+  #   environment:
+  #     - ROS_IP=${ADRESS_IP}
+  #     - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+  #     - AUV=${AUV}
+  #   network_mode: host
+  #   privileged: true
+  #   depends_on:
+  #     - ros-master
 
   # provider_underwater_com:
   #     image: ghcr.io/sonia-auv/provider_underwater_com/provider_underwater_com:x86-perception-fix-refactor-driver
@@ -264,14 +264,14 @@ services:
   #       - ros-master
   #     command: stdbuf -o L roslaunch --wait proc_underwater_com proc_underwater_com.launch
 
-  proc_planner:
-    image: ghcr.io/sonia-auv/proc_planner/proc_planner:x86-perception-fix-basic-repo
-    container_name: proc_planner
-    environment:
-      - ROS_IP=${ADRESS_IP}
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-      - AUV=${AUV}
-    network_mode: host
-    privileged: true
-    depends_on:
-      - ros-master
+  # proc_planner:
+  #   image: ghcr.io/sonia-auv/proc_planner/proc_planner:x86-perception-fix-basic-repo
+  #   container_name: proc_planner
+  #   environment:
+  #     - ROS_IP=${ADRESS_IP}
+  #     - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+  #     - AUV=${AUV}
+  #   network_mode: host
+  #   privileged: true
+  #   depends_on:
+  #     - ros-master

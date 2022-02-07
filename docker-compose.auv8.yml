@@ -3,7 +3,7 @@ version: "3.4"
 services:
   ros-master:
     network_mode: host
-    image: ros:melodic-ros-core
+    image: ros:neotic-ros-core
     container_name: ros-master
     environment:
       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
@@ -211,6 +211,7 @@ services:
     environment:
       - ROS_IP=${ADRESS_IP}
       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - AUV=${AUV}
     network_mode: host
     privileged: true
     volumes:
@@ -237,6 +238,7 @@ services:
     environment:
       - ROS_IP=${ADRESS_IP}
       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - AUV=${AUV}
     network_mode: host
     privileged: true
     devices:
