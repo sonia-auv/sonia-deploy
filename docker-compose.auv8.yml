@@ -3,7 +3,7 @@ version: "3.4"
 services:
   ros-master:
     network_mode: host
-    image: ros:melodic-ros-core
+    image: ros:neotic-ros-core
     container_name: ros-master
     environment:
       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
@@ -63,7 +63,7 @@ services:
       - ros-master
 
   proc_hydrophone:
-    image: ghcr.io/sonia-auv/proc_hydrophone/proc_hydrophone:arm64-perception-fix-update-docker
+    image: ghcr.io/sonia-auv/proc_hydrophone/proc_hydrophone:arm64-perception-develop
     container_name: proc_hydrophone
     environment:
       - ROS_IP=${ADRESS_IP}
@@ -111,7 +111,7 @@ services:
 #    command: stdbuf -o L roslaunch --wait proc_detection proc_detection.launch
 
   provider_dvl:
-    image: ghcr.io/sonia-auv/provider_dvl/provider_dvl:arm64-perception-feature-tcp_pathfinder
+    image: ghcr.io/sonia-auv/provider_dvl/provider_dvl:arm64-perception-feature-noetic
     container_name: provider_dvl
     environment:
       - ROS_IP=${ADRESS_IP}
@@ -121,7 +121,7 @@ services:
       - ros-master
 
   provider_hydrophone:
-    image: ghcr.io/sonia-auv/provider_hydrophone/provider_hydrophone:arm64-perception-feature-setting-service
+    image: ghcr.io/sonia-auv/provider_hydrophone/provider_hydrophone:arm64-perception-fix-checksum
     container_name: provider_hydrophone
     environment:
       - ROS_IP=${ADRESS_IP}
@@ -144,7 +144,7 @@ services:
       - ros-master
 
   provider_imu:
-    image: ghcr.io/sonia-auv/provider_imu/provider_imu:arm64-perception-develop
+    image: ghcr.io/sonia-auv/provider_imu/provider_imu:arm64-perception-feature-dvl_safety
     container_name: provider_imu
     environment:
     - ROS_IP=${ADRESS_IP}
@@ -157,7 +157,7 @@ services:
       - ros-master
 
   provider_depth:
-    image: ghcr.io/sonia-auv/provider_depth/provider_depth:arm64-perception-develop
+    image: ghcr.io/sonia-auv/provider_depth/provider_depth:arm64-perception-feature-add-data
     container_name: provider_depth
     environment:
       - ROS_IP=${ADRESS_IP}
@@ -174,7 +174,7 @@ services:
     container_name: provider_power
     environment:
       - ROS_IP=${ADRESS_IP}
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311    
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
     network_mode: host
     depends_on:
       - ros-master
@@ -211,6 +211,7 @@ services:
     environment:
       - ROS_IP=${ADRESS_IP}
       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - AUV=${AUV}
     network_mode: host
     privileged: true
     volumes:
@@ -232,11 +233,12 @@ services:
     command: stdbuf -o L roslaunch --wait proc_image_processing proc_image_processing.launch
 
   provider_vision:
-    image: ghcr.io/sonia-auv/provider_vision/provider_vision:arm64-perception-feature-resize-two-cam
+    image: ghcr.io/sonia-auv/provider_vision/provider_vision:arm64-perception-develop
     container_name: provider_vision
     environment:
       - ROS_IP=${ADRESS_IP}
       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - AUV=${AUV}
     network_mode: host
     privileged: true
     devices:
@@ -276,7 +278,7 @@ services:
       - ros-master
 
   proc_planner:
-    image: ghcr.io/sonia-auv/proc_planner/proc_planner:arm64-perception-fix-basic-repo
+    image: ghcr.io/sonia-auv/proc_planner/proc_planner:arm64-perception-develop
     container_name: proc_planner
     environment:
       - ROS_IP=${ADRESS_IP}
