@@ -3,7 +3,7 @@ version: "3.4"
 services:
   ros-master:
     network_mode: host
-    image: ros:neotic-ros-core
+    image: ros:noetic-ros-core
     container_name: ros-master
     environment:
       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
@@ -52,25 +52,25 @@ services:
     depends_on:
       - ros-master
 
-  proc_actuators:
-    image: ghcr.io/sonia-auv/proc_actuators/proc_actuators:arm64-perception-develop
-    container_name: proc_actuators
-    environment:
-      - ROS_IP=${ADRESS_IP}
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311    
-    network_mode: host
-    depends_on:
-      - ros-master
+  # proc_actuators:
+  #   image: ghcr.io/sonia-auv/proc_actuators/proc_actuators:arm64-perception-develop
+  #   container_name: proc_actuators
+  #   environment:
+  #     - ROS_IP=${ADRESS_IP}
+  #     - ROS_MASTER_URI=http://${ADRESS_IP}:11311    
+  #   network_mode: host
+  #   depends_on:
+  #     - ros-master
 
-  proc_hydrophone:
-    image: ghcr.io/sonia-auv/proc_hydrophone/proc_hydrophone:arm64-perception-develop
-    container_name: proc_hydrophone
-    environment:
-      - ROS_IP=${ADRESS_IP}
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-    network_mode: host
-    depends_on:
-      - ros-master
+  # proc_hydrophone:
+  #   image: ghcr.io/sonia-auv/proc_hydrophone/proc_hydrophone:arm64-perception-develop
+  #   container_name: proc_hydrophone
+  #   environment:
+  #     - ROS_IP=${ADRESS_IP}
+  #     - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+  #   network_mode: host
+  #   depends_on:
+  #     - ros-master
 
 #  proc_sonar:
 #    image: ghcr.io/sonia-auv/proc_sonar/proc_sonar:arm64-perception-latest
@@ -120,18 +120,18 @@ services:
     depends_on:
       - ros-master
 
-  provider_hydrophone:
-    image: ghcr.io/sonia-auv/provider_hydrophone/provider_hydrophone:arm64-perception-fix-checksum
-    container_name: provider_hydrophone
-    environment:
-      - ROS_IP=${ADRESS_IP}
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-    network_mode: host
-    privileged: true
-    volumes:
-      - /dev/HYDRO:/dev/HYDRO
-    depends_on:
-      - ros-master
+  # provider_hydrophone:
+  #   image: ghcr.io/sonia-auv/provider_hydrophone/provider_hydrophone:arm64-perception-fix-checksum
+  #   container_name: provider_hydrophone
+  #   environment:
+  #     - ROS_IP=${ADRESS_IP}
+  #     - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+  #   network_mode: host
+  #   privileged: true
+  #   volumes:
+  #     - /dev/HYDRO:/dev/HYDRO
+  #   depends_on:
+  #     - ros-master
 
   provider_thruster:
     image: ghcr.io/sonia-auv/provider_thruster/provider_thruster:arm64-perception-develop
@@ -179,15 +179,15 @@ services:
     depends_on:
       - ros-master
 
-  provider_actuators:
-    image: ghcr.io/sonia-auv/provider_actuators/provider_actuators:arm64-perception-develop
-    container_name: provider_actuators
-    environment:
-      - ROS_IP=${ADRESS_IP}
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311    
-    network_mode: host
-    depends_on:
-      - ros-master
+  # provider_actuators:
+  #   image: ghcr.io/sonia-auv/provider_actuators/provider_actuators:arm64-perception-develop
+  #   container_name: provider_actuators
+  #   environment:
+  #     - ROS_IP=${ADRESS_IP}
+  #     - ROS_MASTER_URI=http://${ADRESS_IP}:11311    
+  #   network_mode: host
+  #   depends_on:
+  #     - ros-master
       
   provider_system:
     image: ghcr.io/sonia-auv/provider_system/provider_system:arm64-perception-develop
@@ -246,7 +246,6 @@ services:
       - /dev/CAM1:/dev/CAM1
     depends_on:
       - ros-master
-    command: stdbuf -o L roslaunch --wait provider_vision provider_vision.launch
 
   simulink_monitor:
     image: ghcr.io/sonia-auv/simulink-monitor/simulink-monitor:arm64-perception-latest
