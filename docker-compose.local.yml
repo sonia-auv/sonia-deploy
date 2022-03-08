@@ -25,17 +25,17 @@ services:
         - rosbridge_server
         - rosbridge_websocket.launch
 
-  # sonia-ros-tcp-endpoint:
-  #   image: ghcr.io/sonia-auv/sonia-ros-tcp-endpoint/sonia-ros-tcp-endpoint:x86-perception-latest
-  #   container_name: sonia-ros-tcp-endpoint
-  #   network_mode: host
-  #   depends_on:
-  #     - ros-master
-  #   command:
-  #     - roslaunch
-  #     - --wait
-  #     - ros_tcp_endpoint
-  #     - endpoint.launch
+  sonia-ros-tcp-endpoint:
+    image: ghcr.io/sonia-auv/sonia-ros-tcp-endpoint/sonia-ros-tcp-endpoint:x86-perception-latest
+    container_name: sonia-ros-tcp-endpoint
+    network_mode: host
+    depends_on:
+      - ros-master
+    command:
+      - roslaunch
+      - --wait
+      - ros_tcp_endpoint
+      - endpoint.launch
       
   octopus_telemetry:
     image: ghcr.io/sonia-auv/octopus-telemetry:local
@@ -47,39 +47,39 @@ services:
       - sonia-ros-bridge
 
 
-  # proc_image_processing:
-  #   image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:x86-perception-develop
-  #   container_name: proc_image_processing
-  #   environment:
-  #     - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-  #     - ROS_IP=${ADRESS_IP}
-  #   network_mode: host
-  #   depends_on:
-  #      - ros-master
+  proc_image_processing:
+    image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:x86-perception-develop
+    container_name: proc_image_processing
+    environment:
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - ROS_IP=${ADRESS_IP}
+    network_mode: host
+    depends_on:
+       - ros-master
 
-  # proc_control:
-  #   image: ghcr.io/sonia-auv/proc_control/proc_control:x86-perception-feature-rosparam
-  #   container_name: proc_control
-  #   environment:
-  #     - ROS_IP=${ADRESS_IP}
-  #     - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-  #     - AUV=${AUV}
-  #   network_mode: host
-  #   privileged: true
-  #   depends_on:
-  #     - ros-master
+  proc_control:
+    image: ghcr.io/sonia-auv/proc_control/proc_control:x86-perception-feature-rosparam
+    container_name: proc_control
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - AUV=${AUV}
+    network_mode: host
+    privileged: true
+    depends_on:
+      - ros-master
 
-  # proc_planner:
-  #   image: ghcr.io/sonia-auv/proc_planner/proc_planner:x86-perception-fix-init-error
-  #   container_name: proc_planner
-  #   environment:
-  #     - ROS_IP=${ADRESS_IP}
-  #     - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-  #     - AUV=${AUV}
-  #   network_mode: host
-  #   privileged: true
-  #   depends_on:
-  #     - ros-master
+  proc_planner:
+    image: ghcr.io/sonia-auv/proc_planner/proc_planner:x86-perception-fix-init-error
+    container_name: proc_planner
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - AUV=${AUV}
+    network_mode: host
+    privileged: true
+    depends_on:
+      - ros-master
 
   # provider_kill_mission:
   #   image: ghcr.io/sonia-auv/provider_kill_mission/provider_kill_mission:x86-perception-develop
