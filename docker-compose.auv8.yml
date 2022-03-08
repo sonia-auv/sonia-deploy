@@ -264,7 +264,7 @@ services:
     container_name: octopus_telemetry
     network_mode: host
     environment:
-      - REACT_APP_BRIDGE_IP=192.168.0.31
+      - REACT_APP_BRIDGE_IP=${ADRESS_IP}
     depends_on: 
       - sonia-ros-bridge
 
