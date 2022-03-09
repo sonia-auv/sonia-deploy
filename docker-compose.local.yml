@@ -41,8 +41,11 @@ services:
     image: ghcr.io/sonia-auv/octopus-telemetry:local
     container_name: octopus_telemetry
     network_mode: host
+    environment:
+      - REACT_APP_BRIDGE_IP=${ADRESS_IP}
     depends_on: 
       - sonia-ros-bridge
+
 
   proc_image_processing:
     image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:x86-perception-develop
