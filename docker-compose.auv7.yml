@@ -116,6 +116,7 @@ services:
     environment:
       - ROS_IP=${ADRESS_IP}
       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - AUV = ${AUV}
     network_mode: host
     depends_on:
       - ros-master
