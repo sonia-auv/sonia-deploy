@@ -38,7 +38,7 @@ services:
       - endpoint.launch
       
   octopus_telemetry:
-    image: ghcr.io/sonia-auv/octopus-telemetry:local
+    image: ghcr.io/sonia-auv/octopus-telemetry:develop
     container_name: octopus_telemetry
     network_mode: host
     depends_on: 
@@ -53,6 +53,30 @@ services:
     network_mode: host
     depends_on:
        - ros-master
+
+  proc_control:
+    image: ghcr.io/sonia-auv/proc_control/proc_control:x86-perception-feature-rosparam
+    container_name: proc_control
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - AUV=${AUV}
+    network_mode: host
+    depends_on:
+      - ros-master
+
+  proc_planner:
+    image: ghcr.io/sonia-auv/proc_planner/proc_planner:x86-perception-fix-init-error
+    container_name: proc_planner
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - AUV=${AUV}
+    network_mode: host
+    privileged: true
+    depends_on:
+      - ros-master
+
 
   # provider_kill_mission:
   #   image: ghcr.io/sonia-auv/provider_kill_mission/provider_kill_mission:x86-perception-develop
@@ -183,19 +207,19 @@ services:
   #   depends_on:
   #     - ros-master
 
-  # interface_rs485:
-  #   image: ghcr.io/sonia-auv/interface_rs485/interface_rs485:x86-perception-feature-local-debug
-  #   container_name: interface_rs485
-  #   environment:
-  #     - ROS_IP=${ADRESS_IP}
-  #     - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-  #     - AUV=${AUV}
-  #   network_mode: host
-  #   privileged: true
-  #   volumes:
-  #    - /dev/ttyUSB0:/dev/ttyUSB0
-  #   depends_on:
-  #    - ros-master
+  interface_rs485:
+    image: ghcr.io/sonia-auv/interface_rs485/interface_rs485:x86-perception-develop
+    container_name: interface_rs485
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - AUV=${AUV}
+    network_mode: host
+    privileged: true
+    volumes:
+     - /dev/ttyUSB0:/dev/ttyUSB0
+    depends_on:
+     - ros-master
 
   # provider_vision:
   #   image: ghcr.io/sonia-auv/provider_vision/provider_vision:x86-perception-feature-testing-modif
