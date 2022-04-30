@@ -52,15 +52,15 @@ services:
     depends_on:
       - ros-master
 
-  proc_actuators:
-    image: ghcr.io/sonia-auv/proc_actuators/proc_actuators:arm64-perception-develop
-    container_name: proc_actuators
-    environment:
-      - ROS_IP=${ADRESS_IP}
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311    
-    network_mode: host
-    depends_on:
-      - ros-master
+  # proc_actuators:
+  #   image: ghcr.io/sonia-auv/proc_actuators/proc_actuators:arm64-perception-develop
+  #   container_name: proc_actuators
+  #   environment:
+  #     - ROS_IP=${ADRESS_IP}
+  #     - ROS_MASTER_URI=http://${ADRESS_IP}:11311    
+  #   network_mode: host
+  #   depends_on:
+  #     - ros-master
 
   # proc_hydrophone:
   #   image: ghcr.io/sonia-auv/proc_hydrophone/proc_hydrophone:arm64-perception-develop
@@ -146,11 +146,12 @@ services:
       - ros-master
 
   provider_imu:
-    image: ghcr.io/sonia-auv/provider_imu/provider_imu:arm64-perception-feature-dvl_safety
+    image: ghcr.io/sonia-auv/provider_imu/provider_imu:arm64-perception-feature-cleanup-repos
     container_name: provider_imu
     environment:
     - ROS_IP=${ADRESS_IP}
     - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+    - AUV=${AUV}
     network_mode: host
     privileged: true
     volumes:
@@ -158,38 +159,26 @@ services:
     depends_on:
       - ros-master
 
-  # provider_depth:
-  #   image: ghcr.io/sonia-auv/provider_depth/provider_depth:arm64-perception-feature-add-data
-  #   container_name: provider_depth
-  #   environment:
-  #     - ROS_IP=${ADRESS_IP}
-  #     - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-  #   network_mode: host
-  #   privileged: true
-  #   volumes:
-  #     - /dev/DEPTH:/dev/DEPTH
-  #   depends_on:
-  #     - ros-master
-
   provider_power:
-    image: ghcr.io/sonia-auv/provider_power/provider_power:arm64-perception-develop
+    image: ghcr.io/sonia-auv/provider_power/provider_power:arm64-perception-feature-auv7
     container_name: provider_power
     environment:
       - ROS_IP=${ADRESS_IP}
       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - AUV=${AUV}
     network_mode: host
     depends_on:
       - ros-master
 
-  provider_actuators:
-    image: ghcr.io/sonia-auv/provider_actuators/provider_actuators:arm64-perception-develop
-    container_name: provider_actuators
-    environment:
-      - ROS_IP=${ADRESS_IP}
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311    
-    network_mode: host
-    depends_on:
-      - ros-master
+  # provider_actuators:
+  #   image: ghcr.io/sonia-auv/provider_actuators/provider_actuators:arm64-perception-develop
+  #   container_name: provider_actuators
+  #   environment:
+  #     - ROS_IP=${ADRESS_IP}
+  #     - ROS_MASTER_URI=http://${ADRESS_IP}:11311    
+  #   network_mode: host
+  #   depends_on:
+  #     - ros-master
       
   provider_system:
     image: ghcr.io/sonia-auv/provider_system/provider_system:arm64-perception-develop
@@ -250,17 +239,6 @@ services:
       - ros-master
     command: stdbuf -o L roslaunch --wait provider_vision provider_vision.launch
 
-  # simulink_monitor:
-  #   image: ghcr.io/sonia-auv/simulink-monitor/simulink-monitor:arm64-perception-latest
-  #   container_name: simulink_monitor
-  #   environment:
-  #     - ROS_IP=${ADRESS_IP}
-  #     - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-  #   network_mode: host
-  #   privileged: true
-  #   depends_on:
-  #     - ros-master
-
   octopus_telemetry:
     image: ghcr.io/sonia-auv/octopus-telemetry:develop
     container_name: octopus_telemetry
@@ -271,7 +249,7 @@ services:
       - sonia-ros-bridge
 
   proc_control:
-    image: ghcr.io/sonia-auv/proc_control/proc_control:arm64-perception-develop
+    image: ghcr.io/sonia-auv/proc_control/proc_control:arm64-perception-feature-prequalif
     container_name: proc_control
     environment:
       - ROS_IP=${ADRESS_IP}
@@ -282,7 +260,7 @@ services:
       - ros-master
 
   proc_planner:
-    image: ghcr.io/sonia-auv/proc_planner/proc_planner:arm64-perception-develop
+    image: ghcr.io/sonia-auv/proc_planner/proc_planner:arm64-perception-feature-refactor-planner
     container_name: proc_planner
     environment:
       - ROS_IP=${ADRESS_IP}
