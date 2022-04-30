@@ -224,7 +224,7 @@ services:
     command: stdbuf -o L roslaunch --wait proc_image_processing proc_image_processing.launch
 
   provider_vision:
-    image: ghcr.io/sonia-auv/provider_vision/provider_vision:arm64-perception-fix-one-cam
+    image: ghcr.io/sonia-auv/provider_vision/provider_vision:arm64-perception-develop
     container_name: provider_vision
     environment:
       - ROS_IP=${ADRESS_IP}
