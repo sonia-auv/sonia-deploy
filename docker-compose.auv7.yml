@@ -111,7 +111,7 @@ services:
 #    command: stdbuf -o L roslaunch --wait proc_detection proc_detection.launch
 
   provider_dvl:
-    image: ghcr.io/sonia-auv/provider_dvl/provider_dvl:arm64-perception-feature-noetic
+    image: ghcr.io/sonia-auv/provider_dvl/provider_dvl:arm64-perception-feature-dvl_new_design
     container_name: provider_dvl
     environment:
       - ROS_IP=${ADRESS_IP}
