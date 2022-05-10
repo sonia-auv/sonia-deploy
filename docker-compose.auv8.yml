@@ -265,6 +265,7 @@ services:
     network_mode: host
     environment:
       - REACT_APP_BRIDGE_IP=${ADRESS_IP}
+      - REACT_APP_AUV=${AUV}
     depends_on: 
       - sonia-ros-bridge
 
