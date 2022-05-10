@@ -43,6 +43,7 @@ services:
     network_mode: host
     environment:
       - REACT_APP_BRIDGE_IP=${ADRESS_IP}
+      - REACT_APP_AUV=${AUV}
     depends_on: 
       - sonia-ros-bridge
 
@@ -58,7 +59,7 @@ services:
        - ros-master
 
   proc_control:
-    image: ghcr.io/sonia-auv/proc_control/proc_control:x86-perception-feature-rosparam
+    image: ghcr.io/sonia-auv/proc_control/proc_control:x86-perception-feature-pre-qualif
     container_name: proc_control
     environment:
       - ROS_IP=${ADRESS_IP}
@@ -70,7 +71,7 @@ services:
       - ros-master
 
   proc_planner:
-    image: ghcr.io/sonia-auv/proc_planner/proc_planner:x86-perception-fix-init-error
+    image: ghcr.io/sonia-auv/proc_planner/proc_planner:x86-perception-feature-refactor-planner
     container_name: proc_planner
     environment:
       - ROS_IP=${ADRESS_IP}
