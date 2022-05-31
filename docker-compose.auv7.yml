@@ -22,6 +22,7 @@ services:
       command:
         - roslaunch
         - --wait
+        - --log
         - rosbridge_server
         - rosbridge_websocket.launch
   
@@ -78,38 +79,6 @@ services:
 #    depends_on:
 #      - ros-master
 
-#  proc_detection:
-#    image: ghcr.io/sonia-auv/proc_detection/proc_detection:arm64-perception-feature-tensorflow-gpu
-#    container_name: proc_detection
-#    environment:
-#      - ROS_IP=${ADRESS_IP}
-#      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-#      - PYTHONUNBUFFERED=1
-#      - PYTHON_EXECUTABLE=/usr/bin/python3
-#      - NVIDIA_VISIBLE_DEVICES=all
-#    network_mode: host
-#    privileged: true
-#    depends_on:
-#      - ros-master
-#    volumes:
-#      - /home/sonia/ssd/object_detection:/home/sonia/ros_sonia_ws/src/proc_detection/external
-#      - /usr/lib/aarch64-linux-gnu/tegra:/usr/lib/aarch64-linux-gnu/tegra
-#      - /usr/local/cuda-10.2/lib64:/usr/local/cuda-10.2/lib64
-#      - /proc:/proc
-#    devices:
-#      - /dev/nvhost-ctrl:/dev/nvhost-ctrl 
-#      - /dev/nvhost-ctrl-gpu:/dev/nvhost-ctrl-gpu
-#      - /dev/nvhost-prof-gpu:/dev/nvhost-prof-gpu 
-#      - /dev/nvmap:/dev/nvmap 
-#      - /dev/nvhost-gpu:/dev/nvhost-gpu
-#    deploy:
-#      resources:
-#        reservations:
-#          devices:
-#          - driver: nvidia
-#            capabilities: [gpu]
-#    command: stdbuf -o L roslaunch --wait proc_detection proc_detection.launch
-
   provider_dvl:
     image: ghcr.io/sonia-auv/provider_dvl/provider_dvl:arm64-perception-feature-dvl_new_design
     container_name: provider_dvl
@@ -146,7 +115,7 @@ services:
       - ros-master
 
   provider_imu:
-    image: ghcr.io/sonia-auv/provider_imu/provider_imu:arm64-perception-feature-cleanup-repos
+    image: ghcr.io/sonia-auv/provider_imu/provider_imu:arm64-perception-develop
     container_name: provider_imu
     environment:
     - ROS_IP=${ADRESS_IP}
@@ -160,7 +129,7 @@ services:
       - ros-master
 
   provider_power:
-    image: ghcr.io/sonia-auv/provider_power/provider_power:arm64-perception-feature-auv7
+    image: ghcr.io/sonia-auv/provider_power/provider_power:arm64-perception-develop
     container_name: provider_power
     environment:
       - ROS_IP=${ADRESS_IP}
@@ -190,12 +159,6 @@ services:
     depends_on:
       - ros-master
 
-#  provider_sonar:
-#   image: ghcr.io/sonia-auv/provider_sonar/provider_sonar:arm64-perception-latest
-#    network_mode: host
-#    depends_on:
-#      - ros-master
-
   interface_rs485:
     image: ghcr.io/sonia-auv/interface_rs485/interface_rs485:arm64-perception-develop
     container_name: interface_rs485
@@ -211,7 +174,7 @@ services:
       - ros-master
 
   proc_image_processing:
-    image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:arm64-perception-feature-move-filterchain-config
+    image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:arm64-perception-develop
     container_name: proc_image_processing
     environment:
       - ROS_IP=${ADRESS_IP}
@@ -221,7 +184,6 @@ services:
       - /home/sonia/ssd/config_filterchain:/home/sonia/ros_sonia_ws/src/proc_image_processing/config
     depends_on:
       - ros-master
-    command: stdbuf -o L roslaunch --wait proc_image_processing proc_image_processing.launch
 
   provider_vision:
     image: ghcr.io/sonia-auv/provider_vision/provider_vision:arm64-perception-develop
@@ -249,19 +211,19 @@ services:
     depends_on: 
       - sonia-ros-bridge
 
-  proc_control:
-    image: ghcr.io/sonia-auv/proc_control/proc_control:arm64-perception-feature-prequalif
-    container_name: proc_control
-    environment:
-      - ROS_IP=${ADRESS_IP}
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-      - AUV=${AUV}
-    network_mode: host
-    depends_on:
-      - ros-master
+  # proc_control:
+  #   image: ghcr.io/sonia-auv/proc_control/proc_control:arm64-perception-feature-dans-marde
+  #   container_name: proc_control
+  #   environment:
+  #     - ROS_IP=${ADRESS_IP}
+  #     - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+  #     - AUV=${AUV}
+  #   network_mode: host
+  #   depends_on:
+  #     - ros-master
 
   proc_planner:
-    image: ghcr.io/sonia-auv/proc_planner/proc_planner:arm64-perception-feature-refactor-planner
+    image: ghcr.io/sonia-auv/proc_planner/proc_planner:arm64-perception-feature-dans-marde
     container_name: proc_planner
     environment:
       - ROS_IP=${ADRESS_IP}
@@ -271,24 +233,3 @@ services:
     privileged: true
     depends_on:
       - ros-master
-
-  proc_detection:
-    image: ghcr.io/sonia-auv/proc_detection-arm64:feature
-    container_name: proc_detection
-    environment:
-      - ROS_IP=${ADRESS_IP}
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-      - AUV=${AUV}
-      - NVIDIA_VISIBLE_DEVICES=all
-      - NVIDIA_DRIVER_CAPABILITIES=all
-      - CUDA_VISIBLE_DEVICES=0
-      - PYTHONUNBUFFERED=1
-      - PYTHON_EXECUTABLE=/usr/bin/python3
-    network_mode: host
-    privileged: true
-    runtime: nvidia
-    depends_on:
-      - ros-master
-    volumes: 
-      - /home/sonia/ssd/external_ressource/proc_detection:/home/sonia/ros_sonia_ws/src/proc_detection/external
-    command: stdbuf -o L roslaunch --wait proc_detection proc_detection.launch
