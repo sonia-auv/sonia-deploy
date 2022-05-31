@@ -11,22 +11,37 @@ services:
     command: stdbuf -o L roscore
   
   sonia-ros-bridge:
-      image: ghcr.io/sonia-auv/sonia-ros-bridge/sonia-ros-bridge:arm64-perception-latest
-      container_name: sonia-ros-bridge
-      network_mode: host
-      environment:
-        - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-        - ROS_IP=${ADRESS_IP}
-      depends_on:
-        - ros-master
-      command:
-        - roslaunch
-        - --wait
-        - rosbridge_server
-        - rosbridge_websocket.launch
+    image: ghcr.io/sonia-auv/sonia-ros-bridge/sonia-ros-bridge:arm64-perception-latest
+    container_name: sonia-ros-bridge
+    network_mode: host
+    environment:
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - ROS_IP=${ADRESS_IP}
+    depends_on:
+      - ros-master
+    command:
+      - roslaunch
+      - --wait
+      - rosbridge_server
+      - rosbridge_websocket.launch
+  
+  sonia-ros-tcp-endpoint:
+    image: ghcr.io/sonia-auv/sonia-ros-tcp-endpoint/sonia-ros-tcp-endpoint:arm64-perception-latest
+    container_name: sonia-ros-tcp-endpoint
+    network_mode: host
+    environment:
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - ROS_IP=${ADRESS_IP}
+    depends_on:
+      - ros-master
+    command:
+      - roslaunch
+      - --wait
+      - ros_tcp_endpoint
+      - endpoint.launch
   
   sonia-flexbe:
-    image: ghcr.io/sonia-auv/sonia-flexbe/sonia-flexbe:arm64-perception-feature-noetic-migration
+    image: ghcr.io/sonia-auv/sonia-flexbe/sonia-flexbe:arm64-perception-develop
     container_name: sonia-flexbe
     network_mode: host
     environment:
@@ -78,45 +93,13 @@ services:
 #    depends_on:
 #      - ros-master
 
-#  proc_detection:
-#    image: ghcr.io/sonia-auv/proc_detection/proc_detection:arm64-perception-feature-tensorflow-gpu
-#    container_name: proc_detection
-#    environment:
-#      - ROS_IP=${ADRESS_IP}
-#      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-#      - PYTHONUNBUFFERED=1
-#      - PYTHON_EXECUTABLE=/usr/bin/python3
-#      - NVIDIA_VISIBLE_DEVICES=all
-#    network_mode: host
-#    privileged: true
-#    depends_on:
-#      - ros-master
-#    volumes:
-#      - /home/sonia/ssd/object_detection:/home/sonia/ros_sonia_ws/src/proc_detection/external
-#      - /usr/lib/aarch64-linux-gnu/tegra:/usr/lib/aarch64-linux-gnu/tegra
-#      - /usr/local/cuda-10.2/lib64:/usr/local/cuda-10.2/lib64
-#      - /proc:/proc
-#    devices:
-#      - /dev/nvhost-ctrl:/dev/nvhost-ctrl 
-#      - /dev/nvhost-ctrl-gpu:/dev/nvhost-ctrl-gpu
-#      - /dev/nvhost-prof-gpu:/dev/nvhost-prof-gpu 
-#      - /dev/nvmap:/dev/nvmap 
-#      - /dev/nvhost-gpu:/dev/nvhost-gpu
-#    deploy:
-#      resources:
-#        reservations:
-#          devices:
-#          - driver: nvidia
-#            capabilities: [gpu]
-#    command: stdbuf -o L roslaunch --wait proc_detection proc_detection.launch
-
   provider_dvl:
     image: ghcr.io/sonia-auv/provider_dvl/provider_dvl:arm64-perception-feature-dvl_new_design
     container_name: provider_dvl
     environment:
       - ROS_IP=${ADRESS_IP}
       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-      - AUV = ${AUV}
+      - AUV=${AUV}
     network_mode: host
     depends_on:
       - ros-master
@@ -140,6 +123,7 @@ services:
     environment:
       - ROS_IP=${ADRESS_IP}
       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - AUV=${AUV}
     network_mode: host
     depends_on:
       - ros-master
@@ -150,6 +134,7 @@ services:
     environment:
     - ROS_IP=${ADRESS_IP}
     - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+    - AUV=${AUV}
     network_mode: host
     privileged: true
     volumes:
@@ -158,7 +143,7 @@ services:
       - ros-master
 
   provider_depth:
-    image: ghcr.io/sonia-auv/provider_depth/provider_depth:arm64-perception-feature-add-data
+    image: ghcr.io/sonia-auv/provider_depth/provider_depth:arm64-perception-develop
     container_name: provider_depth
     environment:
       - ROS_IP=${ADRESS_IP}
@@ -176,19 +161,20 @@ services:
     environment:
       - ROS_IP=${ADRESS_IP}
       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - AUV=${AUV}
     network_mode: host
     depends_on:
       - ros-master
 
-  # provider_actuators:
-  #   image: ghcr.io/sonia-auv/provider_actuators/provider_actuators:arm64-perception-develop
-  #   container_name: provider_actuators
-  #   environment:
-  #     - ROS_IP=${ADRESS_IP}
-  #     - ROS_MASTER_URI=http://${ADRESS_IP}:11311    
-  #   network_mode: host
-  #   depends_on:
-  #     - ros-master
+  # # # provider_actuators:
+  # # #   image: ghcr.io/sonia-auv/provider_actuators/provider_actuators:arm64-perception-develop
+  # # #   container_name: provider_actuators
+  # # #   environment:
+  # # #     - ROS_IP=${ADRESS_IP}
+  # # #     - ROS_MASTER_URI=http://${ADRESS_IP}:11311    
+  # # #   network_mode: host
+  # # #   depends_on:
+  # # #     - ros-master
       
   provider_system:
     image: ghcr.io/sonia-auv/provider_system/provider_system:arm64-perception-develop
@@ -200,11 +186,15 @@ services:
     depends_on:
       - ros-master
 
-#  provider_sonar:
-#   image: ghcr.io/sonia-auv/provider_sonar/provider_sonar:arm64-perception-latest
-#    network_mode: host
-#    depends_on:
-#      - ros-master
+  provider_sonar:
+    image: ghcr.io/sonia-auv/provider_sonar/provider_sonar:arm64-perception-feature-water-external-mode
+    container_name: provider_sonar
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+    network_mode: host
+    depends_on:
+      - ros-master
 
   interface_rs485:
     image: ghcr.io/sonia-auv/interface_rs485/interface_rs485:arm64-perception-develop
@@ -221,7 +211,7 @@ services:
       - ros-master
 
   proc_image_processing:
-    image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:arm64-perception-feature-move-filterchain-config
+    image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:arm64-perception-develop
     container_name: proc_image_processing
     environment:
       - ROS_IP=${ADRESS_IP}
@@ -248,16 +238,16 @@ services:
     depends_on:
       - ros-master
 
-  simulink_monitor:
-    image: ghcr.io/sonia-auv/simulink-monitor/simulink-monitor:arm64-perception-latest
-    container_name: simulink_monitor
-    environment:
-      - ROS_IP=${ADRESS_IP}
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-    network_mode: host
-    privileged: true
-    depends_on:
-      - ros-master
+  # simulink_monitor:
+  #   image: ghcr.io/sonia-auv/simulink-monitor/simulink-monitor:arm64-perception-latest
+  #   container_name: simulink_monitor
+  #   environment:
+  #     - ROS_IP=${ADRESS_IP}
+  #     - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+  #   network_mode: host
+  #   privileged: true
+  #   depends_on:
+  #     - ros-master
 
   octopus_telemetry:
     image: ghcr.io/sonia-auv/octopus-telemetry:develop
@@ -270,7 +260,7 @@ services:
       - sonia-ros-bridge
 
   # proc_control:
-  #   image: ghcr.io/sonia-auv/proc_control/proc_control:arm64-perception-feature-rosparam
+  #   image: ghcr.io/sonia-auv/proc_control/proc_control:arm64-perception-feature-pre-qualif
   #   container_name: proc_control
   #   environment:
   #     - ROS_IP=${ADRESS_IP}
@@ -280,14 +270,14 @@ services:
   #   depends_on:
   #     - ros-master
 
-  # proc_planner:
-  #   image: ghcr.io/sonia-auv/proc_planner/proc_planner:arm64-perception-fix-init-error
-  #   container_name: proc_planner
-  #   environment:
-  #     - ROS_IP=${ADRESS_IP}
-  #     - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-  #     - AUV=${AUV}
-  #   network_mode: host
-  #   privileged: true
-  #   depends_on:
-  #     - ros-master
+  proc_planner:
+    image: ghcr.io/sonia-auv/proc_planner/proc_planner:arm64-perception-feature-refactor-planner
+    container_name: proc_planner
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - AUV=${AUV}
+    network_mode: host
+    privileged: true
+    depends_on:
+      - ros-master
