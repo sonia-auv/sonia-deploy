@@ -281,3 +281,18 @@ services:
     privileged: true
     depends_on:
       - ros-master
+
+  proc_fault:
+    image: ghcr.io/sonia-auv/proc_fault/proc_fault:arm64-perception-feature-develop
+    container_name: proc_fault
+    environment:
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - ROS_IP=${ADRESS_IP}
+      - AUV=${AUV}
+    network_mode: host
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${HOME}/ssd/config-rosparam/proc_fault/config:/home/sonia/ros_sonia_ws/src/proc_fault/config
+    depends_on:
+       - ros-master
+    command: roslaunch --wait src/proc_fault/launch/proc_fault.launch
