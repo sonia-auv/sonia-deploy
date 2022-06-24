@@ -37,16 +37,16 @@ services:
       - ros_tcp_endpoint
       - endpoint.launch
       
-  # octopus_telemetry:
-  #   image: ghcr.io/sonia-auv/octopus-telemetry:develop
-  #   #image: octopus-ui:test
-  #   container_name: octopus_telemetry
-  #   network_mode: host
-  #   environment:
-  #     - REACT_APP_BRIDGE_IP=${ADRESS_IP}
-  #     - REACT_APP_AUV=${AUV}
-  #   depends_on: 
-  #     - sonia-ros-bridge
+  octopus_telemetry:
+    image: ghcr.io/sonia-auv/octopus-telemetry:develop
+    container_name: octopus_telemetry
+    network_mode: host
+    environment:
+      - REACT_APP_BRIDGE_IP=${ADRESS_IP}
+      - REACT_APP_AUV=${AUV}
+    depends_on: 
+      - sonia-ros-bridge
+
 
   proc_image_processing:
     image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:x86-perception-feature-bounding-box
@@ -56,7 +56,7 @@ services:
       - ROS_IP=${ADRESS_IP}
     network_mode: host
     volumes:
-      - /home/kamoss/ros_sonia_ws/src/config_filterchain:/home/sonia/ros_sonia_ws/src/proc_image_processing/config
+      - ${ROS_SONIA_WS}/src/config_filterchain:/home/sonia/ros_sonia_ws/src/proc_image_processing/config
     depends_on:
        - ros-master
 
@@ -173,16 +173,16 @@ services:
   #   depends_on:
   #     - ros-master
 
-  # provider_power:
-  #   image: ghcr.io/sonia-auv/provider_power/provider_power:x86-perception-develop
-  #   container_name: provider_power
-  #   environment:
-  #     - ROS_IP=${ADRESS_IP}
-  #     - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-  #     - AUV=${LOCAL_AUV}
-  #   network_mode: host
-  #   depends_on:
-  #     - ros-master
+  provider_power:
+    image: ghcr.io/sonia-auv/provider_power/provider_power:x86-perception-develop
+    container_name: provider_power
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - AUV=${LOCAL_AUV}
+    network_mode: host
+    depends_on:
+      - ros-master
 
   # provider_actuators:
   #   image: ghcr.io/sonia-auv/provider_actuators/provider_actuators:x86-perception-develop
@@ -262,10 +262,9 @@ services:
   #       - /dev/ttyUSB0:/dev/ttyUSB0
   #     depends_on:
   #       - ros-master
-  #     command: stdbuf -o L roslaunch --wait provider_underwater_com provider_underwater_com.launch
 
   # proc_underwater_com:
-  #     image: ghcr.io/sonia-auv/proc_underwater_com/proc_underwater_com:x86-perception-develop
+  #     image: ghcr.io/sonia-auv/proc_underwater_com/proc_underwater_com:x86-perception-feature-refactoring
   #     container_name: proc_underwater_com
   #     environment:
   #       - ROS_IP=${ADRESS_IP}
@@ -274,7 +273,6 @@ services:
   #     network_mode: host
   #     depends_on:
   #       - ros-master
-  #     command: stdbuf -o L roslaunch --wait proc_underwater_com proc_underwater_com.launch
 
   # proc_planner:
   #   image: ghcr.io/sonia-auv/proc_planner/proc_planner:x86-perception-develop

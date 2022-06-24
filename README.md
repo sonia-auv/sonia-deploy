@@ -10,6 +10,6 @@ To pull the newest image from the docker-compose file, use the pull_xxx.sh scrip
 
 To launch the images from the docker-compose file on the submarine or locally, use the launch_xxx.sh script.
 
-## Change the images
+## How to use the images
 
-To change the image from a specific image, you only need to change the last part of the line with the start `image :`
+Please follow the workflows described in this page : https://wiki.sonia.etsmtl.ca/en/workflow/gitflow-and-development-workflow
