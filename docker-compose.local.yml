@@ -37,19 +37,19 @@ services:
       - ros_tcp_endpoint
       - endpoint.launch
       
-  # octopus_telemetry:
-  #   image: ghcr.io/sonia-auv/octopus-telemetry:develop
-  #   container_name: octopus_telemetry
-  #   network_mode: host
-  #   environment:
-  #     - REACT_APP_BRIDGE_IP=${ADRESS_IP}
-  #     - REACT_APP_AUV=${AUV}
-  #   depends_on: 
-  #     - sonia-ros-bridge
+  octopus_telemetry:
+    image: ghcr.io/sonia-auv/octopus-telemetry:develop
+    container_name: octopus_telemetry
+    network_mode: host
+    environment:
+      - REACT_APP_BRIDGE_IP=${ADRESS_IP}
+      - REACT_APP_AUV=${AUV}
+    depends_on: 
+      - sonia-ros-bridge
 
 
   proc_image_processing:
-    image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:x86-perception-develop
+    image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:x86-perception-feature-bounding-box
     container_name: proc_image_processing
     environment:
       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
@@ -66,14 +66,14 @@ services:
     environment:
       - ROS_IP=${ADRESS_IP}
       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-      - AUV=${AUV}
+      - AUV=${LOCAL_AUV}
     network_mode: host
     privileged: true
     depends_on:
       - ros-master
 
   proc_planner:
-    image: ghcr.io/sonia-auv/proc_planner/proc_planner:x86-perception-feature-refactor-planner
+    image: ghcr.io/sonia-auv/proc_planner/proc_planner:x86-perception-develop
     container_name: proc_planner
     environment:
       - ROS_IP=${ADRESS_IP}
@@ -119,16 +119,6 @@ services:
   # proc_hydrophone:
   #   image: ghcr.io/sonia-auv/proc_hydrophone/proc_hydrophone:x86-perception-develop
   #   container_name: proc_hydrophone
-  #   environment:
-  #     - ROS_IP=${ADRESS_IP}
-  #     - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-  #   network_mode: host
-  #   depends_on:
-  #     - ros-master
-
-  # proc_sonar:
-  #   image: ghcr.io/sonia-auv/proc_sonar/proc_sonar:x86-perception-latest
-  #   container_name: proc_sonar
   #   environment:
   #     - ROS_IP=${ADRESS_IP}
   #     - ROS_MASTER_URI=http://${ADRESS_IP}:11311
@@ -214,22 +204,22 @@ services:
   #   depends_on:
   #     - ros-master
 
-  # interface_rs485:
-  #   image: ghcr.io/sonia-auv/interface_rs485/interface_rs485:x86-perception-fix-simulation
-  #   container_name: interface_rs485
-  #   environment:
-  #     - ROS_IP=${ADRESS_IP}
-  #     - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-  #     - AUV=${LOCAL_AUV}
-  #   network_mode: host
-  #   privileged: true
-  #   depends_on:
-  #    - ros-master
-  #   command:
-  #    - roslaunch
-  #    - --wait
-  #    - interface_rs485
-  #    - interface_rs485_sim.launch
+  interface_rs485:
+    image: ghcr.io/sonia-auv/interface_rs485/interface_rs485:x86-perception-fix-simulation
+    container_name: interface_rs485
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - AUV=${LOCAL_AUV}
+    network_mode: host
+    privileged: true
+    depends_on:
+     - ros-master
+    command:
+     - roslaunch
+     - --wait
+     - interface_rs485
+     - interface_rs485_sim.launch
 
   # provider_vision:
   #   image: ghcr.io/sonia-auv/provider_vision/provider_vision:x86-perception-feature-testing-modif
