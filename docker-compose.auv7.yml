@@ -53,15 +53,15 @@ services:
     depends_on:
       - ros-master
 
-   proc_actuators:
-     image: ghcr.io/sonia-auv/proc_actuators/proc_actuators:arm64-perception-develop
-     container_name: proc_actuators
-     environment:
-       - ROS_IP=${ADRESS_IP}
-       - ROS_MASTER_URI=http://${ADRESS_IP}:11311    
-     network_mode: host
-     depends_on:
-       - ros-master
+  proc_actuators:
+    image: ghcr.io/sonia-auv/proc_actuators/proc_actuators:arm64-perception-develop
+    container_name: proc_actuators
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311    
+    network_mode: host
+    depends_on:
+      - ros-master
 
   # proc_hydrophone:
   #   image: ghcr.io/sonia-auv/proc_hydrophone/proc_hydrophone:arm64-perception-develop
@@ -139,15 +139,15 @@ services:
     depends_on:
       - ros-master
 
-   provider_actuators:
-     image: ghcr.io/sonia-auv/provider_actuators/provider_actuators:arm64-perception-develop
-     container_name: provider_actuators
-     environment:
-       - ROS_IP=${ADRESS_IP}
-       - ROS_MASTER_URI=http://${ADRESS_IP}:11311    
-     network_mode: host
-     depends_on:
-       - ros-master
+  provider_actuators:
+    image: ghcr.io/sonia-auv/provider_actuators/provider_actuators:arm64-perception-develop
+    container_name: provider_actuators
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311    
+    network_mode: host
+    depends_on:
+      - ros-master
       
   provider_system:
     image: ghcr.io/sonia-auv/provider_system/provider_system:arm64-perception-develop
