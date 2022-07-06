@@ -306,7 +306,7 @@ services:
       - AUV=${AUV}
     network_mode: host
     privileged: true
-    devices:
+    volumes:
       - /dev/MODEM:/dev/MODEM
     depends_on:
        - ros-master
