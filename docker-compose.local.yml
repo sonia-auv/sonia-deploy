@@ -48,7 +48,7 @@ services:
       - sonia-ros-bridge
 
   proc_mapping:
-    image: ghcr.io/sonia-auv/proc_mapping/proc_mapping:x86-perception-feature-docker
+    image: ghcr.io/sonia-auv/proc_mapping/proc_mapping:x86-perception-develop
     container_name: proc_mapping
     environment:
       - ROS_IP=${ADRESS_IP}

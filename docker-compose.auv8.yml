@@ -187,7 +187,7 @@ services:
       - ros-master
 
   proc_mapping:
-    image: ghcr.io/sonia-auv/proc_mapping/proc_mapping:arm64-perception-feature-docker
+    image: ghcr.io/sonia-auv/proc_mapping/proc_mapping:arm64-perception-develop
     container_name: proc_mapping
     environment:
       - ROS_IP=${ADRESS_IP}
