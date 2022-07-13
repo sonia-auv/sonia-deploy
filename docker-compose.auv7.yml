@@ -212,7 +212,7 @@ services:
       - sonia-ros-bridge
 
   proc_control:
-    image: ghcr.io/sonia-auv/proc_control/proc_control:arm64-perception-feature-dans-marde
+    image: ghcr.io/sonia-auv/proc_control/proc_control:arm64-perception-feature-build-auv7
     container_name: proc_control
     environment:
       - ROS_IP=${ADRESS_IP}
@@ -223,7 +223,7 @@ services:
       - ros-master
 
   proc_planner:
-    image: ghcr.io/sonia-auv/proc_planner/proc_planner:arm64-perception-feature-dans-marde
+    image: ghcr.io/sonia-auv/proc_planner/proc_planner:arm64-perception-develop
     container_name: proc_planner
     environment:
       - ROS_IP=${ADRESS_IP}
