@@ -22,6 +22,7 @@ services:
       command:
         - roslaunch
         - --wait
+        - --log
         - rosbridge_server
         - rosbridge_websocket.launch
 
@@ -47,6 +48,15 @@ services:
     depends_on: 
       - sonia-ros-bridge
 
+  proc_mapping:
+    image: ghcr.io/sonia-auv/proc_mapping/proc_mapping:x86-perception-develop
+    container_name: proc_mapping
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+    network_mode: host
+    depends_on:
+      - ros-master
 
   proc_image_processing:
     image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:x86-perception-feature-bounding-box
