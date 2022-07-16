@@ -218,7 +218,7 @@ services:
       - ${HOME}/ssd/config-rosparam/proc_fault/config:/home/sonia/ros_sonia_ws/src/proc_fault/config
     depends_on:
        - ros-master
-    command: roslaunch --wait src/proc_fault/launch/proc_fault.launch
+    command: stdbuf -o L roslaunch --wait src/proc_fault/launch/proc_fault.launch
 
   provider_underwater_com:
     image: ghcr.io/sonia-auv/provider_underwater_com/provider_underwater_com:arm64-perception-develop
