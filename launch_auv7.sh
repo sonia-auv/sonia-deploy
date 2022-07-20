@@ -7,6 +7,6 @@ docker rm $(docker ps -a -q)
 source ~/ssd/catkin_ws/devel/setup.bash
 source ~/ssd/catkin_cv_bridge/install/setup.bash --extend
 
-roslaunch proc_detection proc_detection.launch &
+roslaunch --wait proc_detection proc_detection.launch &
 
 docker-compose -f docker-compose.auv7.yml up
