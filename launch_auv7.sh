@@ -1,4 +1,4 @@
-export ADRESS_IP=192.168.0.126
+export ADRESS_IP=$(hostname -I | awk '{print $1}')
 export AUV=AUV7
 sudo chmod -R a+rwx "/home/sonia/ssd/config_filterchain"
 docker rm $(docker ps -a -q)

@@ -1,4 +1,4 @@
-export ADRESS_IP="192.168.0.133"
+export ADRESS_IP=$(hostname -I | awk '{print $1}')
 export AUV=LOCAL
 export LOCAL_AUV=AUV7
 sudo chmod -R a+rwx "$ROS_SONIA_WS/src/config_filterchain"
