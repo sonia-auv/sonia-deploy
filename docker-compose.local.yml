@@ -104,18 +104,6 @@ services:
   #   depends_on:
   #     - ros-master
 
-  # proc_mapping:
-  #   image: ghcr.io/sonia-auv/proc_mapping/proc_mapping:x86-perception-latest
-  #   network_mode: host
-  #   depends_on:
-  #     - ros-master
-
-  # proc_navigation:
-  #   image: ghcr.io/sonia-auv/proc_navigation/proc_navigation:x86-perception-latest
-  #   network_mode: host
-  #   depends_on:
-  #     - ros-master
-
   # proc_actuators:
   #   image: ghcr.io/sonia-auv/proc_actuators/proc_actuators:x86-perception-develop
   #   container_name: proc_actuators
@@ -260,20 +248,6 @@ services:
   #     - ros-master
   #   command: stdbuf -o L roslaunch --wait provider_vision provider_vision.launch
 
-  # simulink_monitor:
-  #   image: ghcr.io/sonia-auv/simulink-monitor/simulink-monitor:x86-perception-latest
-  #   container_name: simulink_monitor
-  #   environment:
-  #     - ROS_IP=${ADRESS_IP}
-  #     - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-  #   network_mode: host
-  #   privileged: true
-  #   ports: 
-  #     - "22:22"
-  #     - "17725:17725"
-  #   depends_on:
-  #     - ros-master
-
   # provider_underwater_com:
   #     image: ghcr.io/sonia-auv/provider_underwater_com/provider_underwater_com:x86-perception-develop
   #     container_name: provider_underwater_com
@@ -288,24 +262,12 @@ services:
   #       - ros-master
 
   # proc_underwater_com:
-  #     image: ghcr.io/sonia-auv/proc_underwater_com/proc_underwater_com:x86-perception-feature-refactoring
+  #     image: ghcr.io/sonia-auv/proc_underwater_com/proc_underwater_com:x86-perception-develop
   #     container_name: proc_underwater_com
   #     environment:
   #       - ROS_IP=${ADRESS_IP}
   #       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-  #       - AUV=${AUV}
+  #       - AUV=${LOCAL_AUV}
   #     network_mode: host
   #     depends_on:
   #       - ros-master
-
-  # proc_planner:
-  #   image: ghcr.io/sonia-auv/proc_planner/proc_planner:x86-perception-develop
-  #   container_name: proc_planner
-  #   environment:
-  #     - ROS_IP=${ADRESS_IP}
-  #     - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-  #     - AUV=${AUV}
-  #   network_mode: host
-  #   privileged: true
-  #   depends_on:
-  #     - ros-master
