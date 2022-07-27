@@ -12,23 +12,6 @@ services:
 
 # Alexandre Desgagné
 
-  sonia-flexbe:
-    image: ghcr.io/sonia-auv/sonia-flexbe/sonia-flexbe:arm64-perception-latest
-    container_name: sonia-flexbe
-    network_mode: host
-    environment:
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-      - ROS_IP=${ADRESS_IP}
-    depends_on:
-      - ros-master
-    command:
-      - roslaunch
-      - --wait
-      - sonia_flexbe
-      - sonia_flexbe.launch
-    volumes:
-      - /home/sonia/sonia:/home/sonia/ros_sonia_ws/src/behaviors
-
   provider_dvl:
     image: ghcr.io/sonia-auv/provider_dvl/provider_dvl:arm64-perception-feature-dvl_new_design
     container_name: provider_dvl
@@ -36,6 +19,38 @@ services:
       - ROS_IP=${ADRESS_IP}
       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
       - AUV=${AUV}
+    network_mode: host
+    depends_on:
+      - ros-master
+    
+  proc_mapping:
+    image: ghcr.io/sonia-auv/proc_mapping/proc_mapping:arm64-perception-develop
+    container_name: proc_mapping
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+    network_mode: host
+    depends_on:
+      - ros-master
+
+  proc_planner:
+    image: ghcr.io/sonia-auv/proc_planner/proc_planner:arm64-perception-latest
+    container_name: proc_planner
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - AUV=${AUV}
+    network_mode: host
+    privileged: true
+    depends_on:
+      - ros-master
+
+  provider_sonar:
+    image: ghcr.io/sonia-auv/provider_sonar/provider_sonar:arm64-perception-feature-water-external-mode
+    container_name: provider_sonar
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
     network_mode: host
     depends_on:
       - ros-master
@@ -248,27 +263,24 @@ services:
       - ros-master
     command: stdbuf -o L roslaunch --wait proc_image_processing proc_image_processing.launch
 
+  sonia-flexbe:
+    image: ghcr.io/sonia-auv/sonia-flexbe/sonia-flexbe:arm64-perception-latest
+    container_name: sonia-flexbe
+    network_mode: host
+    environment:
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - ROS_IP=${ADRESS_IP}
+    depends_on:
+      - ros-master
+    command:
+      - roslaunch
+      - --wait
+      - sonia_flexbe
+      - sonia_flexbe.launch
+    volumes:
+      - /home/sonia/sonia:/home/sonia/ros_sonia_ws/src/behaviors
+
 # Alexandre Lamarre
-
-  proc_mapping:
-    image: ghcr.io/sonia-auv/proc_mapping/proc_mapping:arm64-perception-develop
-    container_name: proc_mapping
-    environment:
-      - ROS_IP=${ADRESS_IP}
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-    network_mode: host
-    depends_on:
-      - ros-master
-
-  provider_sonar:
-    image: ghcr.io/sonia-auv/provider_sonar/provider_sonar:arm64-perception-feature-water-external-mode
-    container_name: provider_sonar
-    environment:
-      - ROS_IP=${ADRESS_IP}
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-    network_mode: host
-    depends_on:
-      - ros-master
   
   proc_control:
     image: ghcr.io/sonia-auv/proc_control/proc_control:arm64-perception-fix-target-reached
@@ -278,17 +290,5 @@ services:
       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
       - AUV=${AUV}
     network_mode: host
-    depends_on:
-      - ros-master
-
-  proc_planner:
-    image: ghcr.io/sonia-auv/proc_planner/proc_planner:arm64-perception-develop
-    container_name: proc_planner
-    environment:
-      - ROS_IP=${ADRESS_IP}
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-      - AUV=${AUV}
-    network_mode: host
-    privileged: true
     depends_on:
       - ros-master
