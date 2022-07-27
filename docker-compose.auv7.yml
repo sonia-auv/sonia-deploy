@@ -11,23 +11,6 @@ services:
     command: stdbuf -o L roscore
 
 # Alexandre Desgagne
-
-  sonia-flexbe:
-    image: ghcr.io/sonia-auv/sonia-flexbe/sonia-flexbe:arm64-perception-latest
-    container_name: sonia-flexbe
-    network_mode: host
-    environment:
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-      - ROS_IP=${ADRESS_IP}
-    depends_on:
-      - ros-master
-    command:
-      - roslaunch
-      - --wait
-      - sonia_flexbe
-      - sonia_flexbe.launch
-    volumes:
-      - /home/sonia/sonia:/home/sonia/ros_sonia_ws/src/behaviors
   
   provider_dvl:
     image: ghcr.io/sonia-auv/provider_dvl/provider_dvl:arm64-perception-feature-dvl_new_design
@@ -37,6 +20,18 @@ services:
       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
       - AUV=${AUV}
     network_mode: host
+    depends_on:
+      - ros-master
+  
+  proc_planner:
+    image: ghcr.io/sonia-auv/proc_planner/proc_planner:arm64-perception-latest
+    container_name: proc_planner
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - AUV=${AUV}
+    network_mode: host
+    privileged: true
     depends_on:
       - ros-master
 
@@ -194,6 +189,23 @@ services:
       - /home/sonia/ssd/config_filterchain:/home/sonia/ros_sonia_ws/src/proc_image_processing/config
     depends_on:
       - ros-master
+  
+  sonia-flexbe:
+    image: ghcr.io/sonia-auv/sonia-flexbe/sonia-flexbe:arm64-perception-latest
+    container_name: sonia-flexbe
+    network_mode: host
+    environment:
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - ROS_IP=${ADRESS_IP}
+    depends_on:
+      - ros-master
+    command:
+      - roslaunch
+      - --wait
+      - sonia_flexbe
+      - sonia_flexbe.launch
+    volumes:
+      - /home/sonia/sonia:/home/sonia/ros_sonia_ws/src/behaviors
 
 # Alexandre Lamarre
   proc_control:
@@ -204,17 +216,5 @@ services:
       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
       - AUV=${AUV}
     network_mode: host
-    depends_on:
-      - ros-master
-
-  proc_planner:
-    image: ghcr.io/sonia-auv/proc_planner/proc_planner:arm64-perception-develop
-    container_name: proc_planner
-    environment:
-      - ROS_IP=${ADRESS_IP}
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-      - AUV=${AUV}
-    network_mode: host
-    privileged: true
     depends_on:
       - ros-master
