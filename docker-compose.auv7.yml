@@ -100,7 +100,7 @@ services:
       - ros-master
 
   provider_power:
-    image: ghcr.io/sonia-auv/provider_power/provider_power:arm64-perception-fix-debug
+    image: ghcr.io/sonia-auv/provider_power/provider_power:arm64-perception-develop
     container_name: provider_power
     environment:
       - ROS_IP=${ADRESS_IP}
