@@ -1,4 +1,4 @@
-version: "3.4"
+version: "3.5"
 
 services:
   ros-master:
@@ -9,22 +9,9 @@ services:
       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
       - ROS_IP=${ADRESS_IP}
     command: stdbuf -o L roscore
-  
-  sonia-ros-tcp-endpoint:
-    image: ghcr.io/sonia-auv/sonia-ros-tcp-endpoint/sonia-ros-tcp-endpoint:arm64-perception-latest
-    container_name: sonia-ros-tcp-endpoint
-    network_mode: host
-    environment:
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-      - ROS_IP=${ADRESS_IP}
-    depends_on:
-      - ros-master
-    command:
-      - roslaunch
-      - --wait
-      - ros_tcp_endpoint
-      - endpoint.launch
-  
+
+# Alexandre Desgagné
+
   sonia-flexbe:
     image: ghcr.io/sonia-auv/sonia-flexbe/sonia-flexbe:arm64-perception-latest
     container_name: sonia-flexbe
@@ -42,6 +29,65 @@ services:
     volumes:
       - /home/sonia/sonia:/home/sonia/ros_sonia_ws/src/behaviors
 
+  provider_dvl:
+    image: ghcr.io/sonia-auv/provider_dvl/provider_dvl:arm64-perception-feature-dvl_new_design
+    container_name: provider_dvl
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - AUV=${AUV}
+    network_mode: host
+    depends_on:
+      - ros-master
+     
+# Lucas Mongrain
+
+  interface_rs485:
+    image: ghcr.io/sonia-auv/interface_rs485/interface_rs485:arm64-perception-develop
+    container_name: interface_rs485
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - AUV=${AUV}
+    network_mode: host
+    privileged: true
+    volumes:
+      - /dev/RS485:/dev/RS485
+    depends_on:
+      - ros-master
+
+  provider_vision:
+    image: ghcr.io/sonia-auv/provider_vision/provider_vision:arm64-perception-develop
+    container_name: provider_vision
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - AUV=${AUV}
+    network_mode: host
+    privileged: true
+    devices:
+      - /dev/CAM0:/dev/CAM0
+      - /dev/CAM1:/dev/CAM1
+    depends_on:
+      - ros-master
+
+  proc_fault:
+    image: ghcr.io/sonia-auv/proc_fault/proc_fault:arm64-perception-develop
+    container_name: proc_fault
+    environment:
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - ROS_IP=${ADRESS_IP}
+      - AUV=${AUV}
+    network_mode: host
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${HOME}/ssd/config-rosparam/proc_fault/config:/home/sonia/ros_sonia_ws/src/proc_fault/config
+    depends_on:
+       - ros-master
+    command: roslaunch --wait src/proc_fault/launch/proc_fault.launch
+      
+# Francis Alonzo
+
   provider_kill_mission:
     image: ghcr.io/sonia-auv/provider_kill_mission/provider_kill_mission:arm64-perception-develop
     container_name: provider_kill_mission
@@ -51,34 +97,23 @@ services:
     network_mode: host
     depends_on:
       - ros-master
-
-  proc_actuators:
-    image: ghcr.io/sonia-auv/proc_actuators/proc_actuators:arm64-perception-develop
-    container_name: proc_actuators
+      
+  provider_system:
+    image: ghcr.io/sonia-auv/provider_system/provider_system:arm64-perception-develop
+    container_name: provider_system
     environment:
       - ROS_IP=${ADRESS_IP}
       - ROS_MASTER_URI=http://${ADRESS_IP}:11311    
     network_mode: host
     depends_on:
       - ros-master
-
+      
   proc_hydrophone:
     image: ghcr.io/sonia-auv/proc_hydrophone/proc_hydrophone:arm64-perception-develop
     container_name: proc_hydrophone
     environment:
       - ROS_IP=${ADRESS_IP}
       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-    network_mode: host
-    depends_on:
-      - ros-master
-
-  provider_dvl:
-    image: ghcr.io/sonia-auv/provider_dvl/provider_dvl:arm64-perception-feature-dvl_new_design
-    container_name: provider_dvl
-    environment:
-      - ROS_IP=${ADRESS_IP}
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-      - AUV=${AUV}
     network_mode: host
     depends_on:
       - ros-master
@@ -146,126 +181,6 @@ services:
     depends_on:
       - ros-master
 
-  provider_actuators:
-    image: ghcr.io/sonia-auv/provider_actuators/provider_actuators:arm64-perception-develop
-    container_name: provider_actuators
-    environment:
-      - ROS_IP=${ADRESS_IP}
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311    
-    network_mode: host
-    depends_on:
-      - ros-master
-      
-  provider_system:
-    image: ghcr.io/sonia-auv/provider_system/provider_system:arm64-perception-develop
-    container_name: provider_system
-    environment:
-      - ROS_IP=${ADRESS_IP}
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311    
-    network_mode: host
-    depends_on:
-      - ros-master
-
-  proc_mapping:
-    image: ghcr.io/sonia-auv/proc_mapping/proc_mapping:arm64-perception-develop
-    container_name: proc_mapping
-    environment:
-      - ROS_IP=${ADRESS_IP}
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-    network_mode: host
-    depends_on:
-      - ros-master
-
-  provider_sonar:
-    image: ghcr.io/sonia-auv/provider_sonar/provider_sonar:arm64-perception-feature-water-external-mode
-    container_name: provider_sonar
-    environment:
-      - ROS_IP=${ADRESS_IP}
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-    network_mode: host
-    depends_on:
-      - ros-master
-
-  interface_rs485:
-    image: ghcr.io/sonia-auv/interface_rs485/interface_rs485:arm64-perception-develop
-    container_name: interface_rs485
-    environment:
-      - ROS_IP=${ADRESS_IP}
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-      - AUV=${AUV}
-    network_mode: host
-    privileged: true
-    volumes:
-      - /dev/RS485:/dev/RS485
-    depends_on:
-      - ros-master
-
-  proc_image_processing:
-    image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:arm64-perception-develop
-    container_name: proc_image_processing
-    environment:
-      - ROS_IP=${ADRESS_IP}
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-    network_mode: host
-    volumes:
-      - /home/sonia/ssd/config_filterchain:/home/sonia/ros_sonia_ws/src/proc_image_processing/config
-    depends_on:
-      - ros-master
-    command: stdbuf -o L roslaunch --wait proc_image_processing proc_image_processing.launch
-
-  provider_vision:
-    image: ghcr.io/sonia-auv/provider_vision/provider_vision:arm64-perception-develop
-    container_name: provider_vision
-    environment:
-      - ROS_IP=${ADRESS_IP}
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-      - AUV=${AUV}
-    network_mode: host
-    privileged: true
-    devices:
-      - /dev/CAM0:/dev/CAM0
-      - /dev/CAM1:/dev/CAM1
-    depends_on:
-      - ros-master
-
-  proc_control:
-    image: ghcr.io/sonia-auv/proc_control/proc_control:arm64-perception-fix-target-reached
-    container_name: proc_control
-    environment:
-      - ROS_IP=${ADRESS_IP}
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-      - AUV=${AUV}
-    network_mode: host
-    depends_on:
-      - ros-master
-
-  proc_planner:
-    image: ghcr.io/sonia-auv/proc_planner/proc_planner:arm64-perception-develop
-    container_name: proc_planner
-    environment:
-      - ROS_IP=${ADRESS_IP}
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-      - AUV=${AUV}
-    network_mode: host
-    privileged: true
-    depends_on:
-      - ros-master
-
-  proc_fault:
-    image: ghcr.io/sonia-auv/proc_fault/proc_fault:arm64-perception-develop
-    container_name: proc_fault
-    environment:
-      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-      - ROS_IP=${ADRESS_IP}
-      - AUV=${AUV}
-    network_mode: host
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ${HOME}/ssd/config-rosparam/proc_fault/config:/home/sonia/ros_sonia_ws/src/proc_fault/config
-    depends_on:
-       - ros-master
-    command: roslaunch --wait src/proc_fault/launch/proc_fault.launch
-
   provider_underwater_com:
     image: ghcr.io/sonia-auv/provider_underwater_com/provider_underwater_com:arm64-perception-develop
     container_name: provider_underwater_com
@@ -290,3 +205,90 @@ services:
     network_mode: host
     depends_on:
        - ros-master
+
+# Victor Zhou
+
+  provider_actuators:
+    image: ghcr.io/sonia-auv/provider_actuators/provider_actuators:arm64-perception-develop
+    container_name: provider_actuators
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311    
+    network_mode: host
+    depends_on:
+      - ros-master
+ 
+#Camille Sauvain
+
+  sonia-ros-tcp-endpoint:
+    image: ghcr.io/sonia-auv/sonia-ros-tcp-endpoint/sonia-ros-tcp-endpoint:arm64-perception-latest
+    container_name: sonia-ros-tcp-endpoint
+    network_mode: host
+    environment:
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - ROS_IP=${ADRESS_IP}
+    depends_on:
+      - ros-master
+    command:
+      - roslaunch
+      - --wait
+      - ros_tcp_endpoint
+      - endpoint.launch
+
+  proc_image_processing:
+    image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:arm64-perception-develop
+    container_name: proc_image_processing
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+    network_mode: host
+    volumes:
+      - /home/sonia/ssd/config_filterchain:/home/sonia/ros_sonia_ws/src/proc_image_processing/config
+    depends_on:
+      - ros-master
+    command: stdbuf -o L roslaunch --wait proc_image_processing proc_image_processing.launch
+
+# Alexandre Lamarre
+
+  proc_mapping:
+    image: ghcr.io/sonia-auv/proc_mapping/proc_mapping:arm64-perception-develop
+    container_name: proc_mapping
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+    network_mode: host
+    depends_on:
+      - ros-master
+
+  provider_sonar:
+    image: ghcr.io/sonia-auv/provider_sonar/provider_sonar:arm64-perception-feature-water-external-mode
+    container_name: provider_sonar
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+    network_mode: host
+    depends_on:
+      - ros-master
+  
+  proc_control:
+    image: ghcr.io/sonia-auv/proc_control/proc_control:arm64-perception-fix-target-reached
+    container_name: proc_control
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - AUV=${AUV}
+    network_mode: host
+    depends_on:
+      - ros-master
+
+  proc_planner:
+    image: ghcr.io/sonia-auv/proc_planner/proc_planner:arm64-perception-develop
+    container_name: proc_planner
+    environment:
+      - ROS_IP=${ADRESS_IP}
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - AUV=${AUV}
+    network_mode: host
+    privileged: true
+    depends_on:
+      - ros-master
