@@ -27,7 +27,7 @@ services:
         - rosbridge_websocket.launch
   
   sonia-flexbe:
-    image: ghcr.io/sonia-auv/sonia-flexbe/sonia-flexbe:arm64-perception-develop
+    image: ghcr.io/sonia-auv/sonia-flexbe/sonia-flexbe:arm64-perception-latest
     container_name: sonia-flexbe
     network_mode: host
     environment:
@@ -145,7 +145,7 @@ services:
       - ros-master
 
   proc_image_processing:
-    image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:arm64-perception-feature-solve-deep-learning-bug
+    image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:arm64-perception-develop
     container_name: proc_image_processing
     environment:
       - ROS_IP=${ADRESS_IP}
