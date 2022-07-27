@@ -10,22 +10,6 @@ services:
       - ROS_IP=${ADRESS_IP}
     command: stdbuf -o L roscore
   
-  sonia-ros-bridge:
-      image: ghcr.io/sonia-auv/sonia-ros-bridge/sonia-ros-bridge:arm64-perception-latest
-      container_name: sonia-ros-bridge
-      network_mode: host
-      environment:
-        - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-        - ROS_IP=${ADRESS_IP}
-      depends_on:
-        - ros-master
-      command:
-        - roslaunch
-        - --wait
-        - --log
-        - rosbridge_server
-        - rosbridge_websocket.launch
-  
   sonia-flexbe:
     image: ghcr.io/sonia-auv/sonia-flexbe/sonia-flexbe:arm64-perception-latest
     container_name: sonia-flexbe
@@ -171,16 +155,6 @@ services:
     depends_on:
       - ros-master
     command: stdbuf -o L roslaunch --wait provider_vision provider_vision.launch
-
-  octopus_telemetry:
-    image: ghcr.io/sonia-auv/octopus-telemetry:develop
-    container_name: octopus_telemetry
-    network_mode: host
-    environment:
-      - REACT_APP_BRIDGE_IP=${ADRESS_IP}
-      - REACT_APP_AUV=${AUV}
-    depends_on: 
-      - sonia-ros-bridge
 
   proc_control:
     image: ghcr.io/sonia-auv/proc_control/proc_control:arm64-perception-fix-target-reached
