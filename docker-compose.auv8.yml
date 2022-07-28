@@ -233,7 +233,7 @@ services:
     depends_on:
       - ros-master
  
-#Camille Sauvain
+# Camille Sauvain
 
   sonia-ros-tcp-endpoint:
     image: ghcr.io/sonia-auv/sonia-ros-tcp-endpoint/sonia-ros-tcp-endpoint:arm64-perception-latest
