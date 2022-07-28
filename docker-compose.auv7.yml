@@ -140,19 +140,19 @@ services:
     depends_on:
       - ros-master
 
-    provider_underwater_com:
-      image: ghcr.io/sonia-auv/provider_underwater_com/provider_underwater_com:arm64-perception-develop
-      container_name: provider_underwater_com
-      environment:
-        - ROS_MASTER_URI=http://${ADRESS_IP}:11311
-        - ROS_IP=${ADRESS_IP}
-        - AUV=${AUV}
-      network_mode: host
-      privileged: true
-      volumes:
-        - /dev/MODEM:/dev/MODEM
-      depends_on:
-        - ros-master
+  provider_underwater_com:
+    image: ghcr.io/sonia-auv/provider_underwater_com/provider_underwater_com:arm64-perception-develop
+    container_name: provider_underwater_com
+    environment:
+      - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - ROS_IP=${ADRESS_IP}
+      - AUV=${AUV}
+    network_mode: host
+    privileged: true
+    volumes:
+      - /dev/MODEM:/dev/MODEM
+    depends_on:
+      - ros-master
 
   proc_underwater_com:
     image: ghcr.io/sonia-auv/proc_underwater_com/proc_underwater_com:arm64-perception-develop
