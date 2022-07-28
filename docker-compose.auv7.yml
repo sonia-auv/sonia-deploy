@@ -166,6 +166,7 @@ services:
        - ros-master
 
 # Victor Zhou
+
   provider_actuators:
     image: ghcr.io/sonia-auv/provider_actuators/provider_actuators:arm64-perception-develop
     container_name: provider_actuators
@@ -208,6 +209,7 @@ services:
       - /home/sonia/sonia:/home/sonia/ros_sonia_ws/src/behaviors
 
 # Alexandre Lamarre
+
   proc_control:
     image: ghcr.io/sonia-auv/proc_control/proc_control:arm64-perception-fix-target-reached
     container_name: proc_control
