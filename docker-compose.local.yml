@@ -49,14 +49,21 @@ services:
   #     - sonia-ros-bridge
 
   proc_mapping:
-    image: ghcr.io/sonia-auv/proc_mapping/proc_mapping:x86-perception-develop
+    image: ghcr.io/sonia-auv/proc_mapping/proc_mapping:x86-perception-feature-table
     container_name: proc_mapping
     environment:
       - ROS_IP=${ADRESS_IP}
       - ROS_MASTER_URI=http://${ADRESS_IP}:11311
+      - AUV=${AUV}
     network_mode: host
     depends_on:
       - ros-master
+    command:
+      - roslaunch
+      - --wait
+      - proc_mapping
+      - proc_mapping.launch
+    
 
   proc_image_processing:
     image: ghcr.io/sonia-auv/proc_image_processing/proc_image_processing:x86-perception-feature-solve-deep-learning-bug
@@ -83,7 +90,7 @@ services:
       - ros-master
 
   proc_planner:
-    image: ghcr.io/sonia-auv/proc_planner/proc_planner:x86-perception-develop
+    image: ghcr.io/sonia-auv/proc_planner/proc_planner:x86-perception-latest
     container_name: proc_planner
     environment:
       - ROS_IP=${ADRESS_IP}
