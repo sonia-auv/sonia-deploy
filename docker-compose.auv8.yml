@@ -283,7 +283,7 @@ services:
 # Alexandre Lamarre
   
   proc_control:
-    image: ghcr.io/sonia-auv/proc_control/proc_control:arm64-perception-fix-target-reached
+    image: ghcr.io/sonia-auv/proc_control/proc_control:arm64-perception-master
     container_name: proc_control
     environment:
       - ROS_IP=${ADRESS_IP}
